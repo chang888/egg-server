@@ -7,12 +7,8 @@ class UserService extends Service {
    */
   async create(payload) {
     const { ctx } = this
-    const { mobile, mid = 1 } = payload
-    let user = await ctx.model.User.findOne({ where: { mobile, mid } })
-    if (user) {
-      ctx.throw(409, "该手机号已注册")
-      return
-    }
+    // const { mobile = "", mid = 1, openid = "" } = payload
+
     // payload.password = await this.ctx.genHash(payload.password)
     return ctx.model.User.create(payload)
   }

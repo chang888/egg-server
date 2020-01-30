@@ -25,8 +25,9 @@ class WechatApiController extends Controller {
     const { appid, appsecret } = app.config.wxConfig.gzhtest
     const oauth = new OAuth(appid, appsecret)
     const state = ctx.query.id
-    console.log("ctx..." + ctx.query)
-    let redirectUrl = ctx.query.callbackUrl
+    console.log("ctx..." + ctx.href)
+    let redirectUrl = ctx.href
+    let callbackUrl = ctx.query.callbackUrl
     redirectUrl = redirectUrl.replace("/wx/authorize", "/wx/callback")
     console.log(redirectUrl, "redirectUrl")
 
@@ -34,7 +35,7 @@ class WechatApiController extends Controller {
     const url = oauth.getAuthorizeURL(redirectUrl, state, scope)
     console.log("url=======" + url)
     // ctx.body = url
-    ctx.redirect(url)
+    ctx.redirect(url + "&callback" + callbackUrl)
   }
   /**
    * @summary 微信用户回调方法
@@ -43,17 +44,22 @@ class WechatApiController extends Controller {
    * @response 200 baseResponse 登录成功
    */
   async callback() {
-    const { ctx, app } = this
+    const { ctx, app, service } = this
     const { appid, appsecret } = app.config.wxConfig.gzhtest
     const oauth = new OAuth(appid, appsecret)
     const code = ctx.query.code
-    console.log("wxCallback code", code)
-    const token = await oauth.getAccessToken(code)
-    const accessToken = token.data.access_token
-    const openid = token.data.openid
-    console.log("accessToken", accessToken)
-    console.log("openid", openid)
-    ctx.redirect("/?openid=" + openid)
+    let callbackUrl = ctx.query.callbackUrl
+    console.log("wxCallback code", code, callbackUrl)
+    const tokenData = await oauth.getAccessToken(code)
+    console.log(tokenData, "成功的token")
+    const openid = tokenData.data.openid
+    // 根据openid查找用户
+    let user = await ctx.model.User.findOne({ where: { openid } })
+    if (!user) {
+      user = await service.user.create({ openid })
+    }
+    let token = await service.userAccess.wxLogin(user)
+    ctx.redirect(`${callbackUrl}?token=${token.token}}`)
   }
   /**
    * @summary 微信登录
@@ -75,4 +81,3 @@ class WechatApiController extends Controller {
   }
 }
 module.exports = WechatApiController
-// }

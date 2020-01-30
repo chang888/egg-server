@@ -72,7 +72,7 @@ module.exports = appInfo => {
     secret: "Great4-M",
     enable: true, // default is false
     // match: [/^\/api/] // optional
-    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback", "/"] // 哪些请求不需要认证
+    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback"] // 哪些请求不需要认证
   }
   // add your user config here
   config.wxConfig = {

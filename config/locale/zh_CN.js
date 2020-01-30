@@ -12,5 +12,6 @@ module.exports = {
   "Welcome back, %s!": "欢迎回来，%s!",
   "Hello %s, how are you today?": "你好 %s, 今天过得咋样？",
   "should match": "不符合规则",
-  "Validation Failed": "未通过校验"
+  "Validation Failed": "未通过校验",
+  "jwt expired": "登录信息已失效"
 }
