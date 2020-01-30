@@ -1,0 +1,11 @@
+{
+  "extends": "eslint-config-egg",
+  "rules": {
+    "quotes": ["error", "double"],
+    "eqeqeq": ["error", "always"],
+    "indent": ["warn", "2"],
+    "semi": ["warn", "never"],
+    "space-before-function-paren": "off",
+    "generator-star-spacing": "off"
+  }
+}
