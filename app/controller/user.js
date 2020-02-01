@@ -10,19 +10,24 @@ class UserController extends Controller {
   /**
    * @summary 创建用户
    * @description 创建用户，记录用户账户/密码/类型
-   * @router post /auth/user/create
+   * @router post /api/user/create
    * @request body createUserRequest *body
    * @response 200 baseResponse 创建成功
    */
   async create() {
     const { ctx, service } = this
     // 校验参数
-    let valid = ctx.validate(ctx.rule.createUserRequest)
-    console.log(valid, 9999921)
+    ctx.validate(ctx.rule.createUserRequest)
     // 组装参数
     const payload = ctx.request.body || {}
+    const { mobile } = payload
+    let mid
+    const data = { mobile, mid: mid ? mid : 1 }
+    // const user = await service.user.findByMobileAndMid(mobile, mid)
+    const user = await service.user.findOne(data)
+    if (user) ctx.throw(409, "该手机号已注册")
     // 调用 Service 进行业务处理
-    const res = await service.user.create(payload)
+    const res = await service.user.create(data)
     // 设置响应内容和响应状态码
     ctx.helper.success({
       ctx,
@@ -95,7 +100,7 @@ class UserController extends Controller {
   /**
    * @summary 获取所有用户(分页/模糊)
    * @description 获取用户信息
-   * @router get /api/user
+   * @router get /api/user/list
    * @request header string *Authorization
    * @request query integer *currentPage eg:1 当前页
    * @request query integer *pageSize eg:10 单页数量

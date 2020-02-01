@@ -43,6 +43,12 @@
           async auth() {
             window.location.href = `/wx/authorize?callbackUrl=${window.location.href}`
           },
+          async getToken() {
+            const qs = Qs.parse(window.location.search.substr(1))
+            let { token } = qs
+            window.localStorage.setItem(token)
+            console.log("token", token)
+          },
           async getUserInfo() {
             const qs = Qs.parse(window.location.search.substr(1))
             const res = await axios.get("/getUserInfo", {
@@ -83,7 +89,9 @@
             })
           }
         },
-        mounted: function() {}
+        mounted: function() {
+          this.getToken()
+        }
       })
     </script>
   </body>

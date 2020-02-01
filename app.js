@@ -17,6 +17,21 @@ class AppBootHook {
 
   configDidLoad() {
     // Config, plugin files have been loaded.
+    const app = this.app
+    const MIDDLEWARE_NAME_JWT = "jwt"
+    const index1 = app.config.appMiddleware.indexOf(MIDDLEWARE_NAME_JWT)
+    console.log(app.config.appMiddleware, "appMiddleware")
+
+    // jwt 中间件后置在统一异常处理之后
+    if (index1 == 0) {
+      console.log("jwt在第一位")
+
+      app.config.appMiddleware.splice(index1, 1)
+      console.log(app.config.appMiddleware, "appMiddleware")
+
+      app.config.appMiddleware.push(MIDDLEWARE_NAME_JWT)
+      console.log(app.config.appMiddleware, "appMiddleware")
+    }
   }
 
   async didLoad() {
@@ -28,6 +43,8 @@ class AppBootHook {
   }
 
   async didReady() {
+    // const assert = require("assert")
+
     // Worker is ready, can do some things
     // don't need to block the app boot.
     const ctx = await this.app.createAnonymousContext()

@@ -25,8 +25,8 @@ module.exports = appInfo => {
   config.swaggerdoc = {
     dirScanner: "./app/controller",
     apiInfo: {
-      title: "开课吧接口",
-      description: "开课吧接口 swagger-ui for egg",
+      title: "cc接口",
+      description: "cc接口文档 for egg",
       version: "1.0.0"
     },
     schemes: ["http", "https"],
@@ -72,7 +72,7 @@ module.exports = appInfo => {
     secret: "Great4-M",
     enable: true, // default is false
     // match: [/^\/api/] // optional
-    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback"] // 哪些请求不需要认证
+    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback", "/auth/jwt/login"] // 哪些请求不需要认证
   }
   // add your user config here
   config.wxConfig = {

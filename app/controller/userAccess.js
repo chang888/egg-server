@@ -22,7 +22,15 @@ class UserAccessController extends Controller {
     ctx.validate(ctx.rule.loginRequest)
     // 组装参数
     const payload = ctx.request.body || {}
+    const { mobile } = payload
+    console.log(mobile, "传来的mobile")
 
+    let user = await service.user.findByMobile(mobile)
+    console.log(user, "YONGHU")
+
+    if (!user) {
+      ctx.throw(404, "该手机号尚未注册")
+    }
     // 调用 Service 进行业务处理
     const res = await service.userAccess.login(payload)
     // 设置响应内容和响应状态码

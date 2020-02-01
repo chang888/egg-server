@@ -65,14 +65,14 @@
         },
         methods: {
           async create() {
-            await axios.post("/api/user", {
+            await axios.post("/api/user/create", {
               mobile: this.mobile,
               password: "111111",
               realName: "老夏"
             })
           },
           async list() {
-            const res = await axios.get("/api/user")
+            const res = await axios.get("/api/user/list")
             this.list = res.data.data.list
           },
           async del() {
