@@ -28,7 +28,7 @@ module.exports = app => {
         comment: "第三方appsecret"
       },
       component_verify_ticket: {
-        type: STRING(50),
+        type: STRING(255),
         comment: "验证票据,微信每10分钟发送一次,有效时间较长"
       },
       component_access_token: {

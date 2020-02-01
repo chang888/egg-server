@@ -20,17 +20,23 @@ class WechatOpenthird extends Service {
    * 设置component_access_token
    * @param {*} payload
    */
-  async setAccessToken(id = 1) {
+  async setAccessToken(component_appid) {
     const { ctx, app } = this
-    const openThird = await ctx.model.User.findOne({ where: { id } })
-    console.log(openThird, "找到的openThird")
-
+    const openThird = await ctx.model.Openthird.findOne({ where: { component_appid } })
     if (!openThird) ctx.throw(404, "第三方平台未找到")
+    const { component_appsecret, component_verify_ticket } = openThird
+    console.log(component_verify_ticket, "票据")
+
     let rs = await app.curl(`https://api.weixin.qq.com/cgi-bin/component/api_component_token`, {
       method: "POST",
-      data: openThird
+      dataType: "json",
+      data: JSON.stringify({ component_appid, component_appsecret, component_verify_ticket })
     })
-    console.log(rs)
+    console.log(rs.data, "设置setAccessToken成功")
+
+    const { component_access_token } = rs.data
+    openThird.update({ component_access_token })
+    return rs.data
   }
 }
 
