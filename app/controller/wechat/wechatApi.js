@@ -77,7 +77,7 @@ class WechatApiController extends Controller {
     // 调用 Service 进行业务处理
     const res = await service.userAccess.login(payload)
     // 设置响应内容和响应状态码
-    ct.helper.success({ ctx, res, msg: "登录成功" })
+    ctx.helper.success({ ctx, res, msg: "登录成功" })
   }
 }
 module.exports = WechatApiController

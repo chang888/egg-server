@@ -137,6 +137,83 @@ class AppBootHook {
       //   } catch (err) {
       //     console.log("新建模拟数据err", err)
       //   }
+      // console.log("Openthird")
+      await ctx.model.queryInterface.dropTable("cc_openthirds")
+      console.log("销毁Openthird表成功")
+      console.log("创建Openthird表")
+      try {
+        await ctx.model.queryInterface.createTable(
+          "cc_openthirds",
+          {
+            id: {
+              type: BIGINT(20),
+              primaryKey: true,
+              autoIncrement: true,
+              comment: "id"
+            },
+            name: {
+              type: STRING(20),
+              allowNull: false,
+              comment: "服务商名字"
+            },
+            component_appid: {
+              type: STRING(20),
+              allowNull: false,
+              unique: true,
+              primaryKey: true,
+              comment: "第三方appid"
+            },
+            component_appsecret: {
+              type: STRING(50),
+              allowNull: false,
+              comment: "第三方appsecret"
+            },
+            component_verify_ticket: {
+              type: STRING(50),
+              comment: "验证票据,微信每10分钟发送一次,有效时间较长"
+            },
+            component_access_token: {
+              type: STRING,
+              comment: "调用凭据令牌,有效期2小时"
+            },
+            created_at: DATE,
+            updated_at: DATE,
+            deleted_at: DATE
+          },
+          {
+            created_at: "create_time",
+            updated_at: "update_time",
+            deleted_at: "delete_time",
+            paranoid: true,
+            getterMethods: {
+              createTime() {
+                // @ts-ignore
+                return new Date(this.getDataValue("create_time")).getTime()
+              },
+              updateTime() {
+                // @ts-ignore
+                return new Date(this.getDataValue("update_time")).getTime()
+              }
+            }
+          }
+        )
+        console.log("建表Openthird成功")
+      } catch (err) {
+        console.log("创建Openthird表error", err)
+        return
+      }
+
+      console.log("新建模拟数据Openthird")
+      try {
+        let res = await ctx.model.Openthird.create({
+          component_appid: "wx63b29481682ccfd8",
+          component_appsecret: "b19e51c6b40cceef1514f59b0e2c96a5",
+          name: "常常服务商test"
+        })
+        console.log("新建模拟数据成功Openthird")
+      } catch (err) {
+        console.log("新建模拟数据Openthirderr", err)
+      }
     }
     // run(ctx)
   }

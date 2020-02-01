@@ -21,7 +21,6 @@ module.exports = appInfo => {
 
   // add your middleware config here
   config.middleware = ["errorHandler"]
-
   config.swaggerdoc = {
     dirScanner: "./app/controller",
     apiInfo: {
@@ -66,13 +65,14 @@ module.exports = appInfo => {
     port: "3306", //端口
     username: "chang",
     password: "Chang789",
-    logging: true
+    logging: true,
+    timezone: "+08:00"
   }
   config.jwt = {
     secret: "Great4-M",
     enable: true, // default is false
     // match: [/^\/api/] // optional
-    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback", "/auth/jwt/login", "/wx/third/authorize"] // 哪些请求不需要认证
+    ignore: ["/test", "/wx/third/test", "/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback", "/auth/jwt/login", "/wx/third/authorize"] // 哪些请求不需要认证
   }
   // add your user config here
   config.wxConfig = {

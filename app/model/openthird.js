@@ -1,8 +1,8 @@
 module.exports = app => {
   const { STRING, DATE, BIGINT, ENUM } = app.Sequelize
 
-  const User = app.model.define(
-    "cc_user",
+  const Openthird = app.model.define(
+    "cc_openthirds",
     {
       id: {
         type: BIGINT(20),
@@ -10,14 +10,21 @@ module.exports = app => {
         autoIncrement: true,
         comment: "id"
       },
-      component_appid: {
-        type: BIGINT(20),
-        defaultValue: 1,
+      name: {
+        type: STRING(20),
         allowNull: false,
+        comment: "服务商名字"
+      },
+      component_appid: {
+        type: STRING(20),
+        unique: true,
+        allowNull: false,
+        primaryKey: true,
         comment: "第三方appid"
       },
       component_appsecret: {
         type: STRING(50),
+        allowNull: false,
         comment: "第三方appsecret"
       },
       component_verify_ticket: {
@@ -49,5 +56,5 @@ module.exports = app => {
       }
     }
   )
-  return User
+  return Openthird
 }
