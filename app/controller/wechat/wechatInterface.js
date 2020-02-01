@@ -17,5 +17,15 @@ module.exports = app => {
     console.log(`message: ${JSON.stringify(message)}`)
     return "发送了" + message.Content
   })
+  WechatInterfaceController.prototype.openthird = wechat(app.config.wxConfig.openthird).middleware(async (message, ctx) => {
+    // TODO
+
+    console.log(`message: ${JSON.stringify(message)}`)
+    if (message.InfoType == "component_verify_ticket") {
+      console.log("进入校验ticket")
+      return "success"
+    }
+    return "发送了" + message.Content
+  })
   return WechatInterfaceController
 }

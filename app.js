@@ -19,17 +19,15 @@ class AppBootHook {
     // Config, plugin files have been loaded.
     const app = this.app
     const MIDDLEWARE_NAME_JWT = "jwt"
-    const index1 = app.config.appMiddleware.indexOf(MIDDLEWARE_NAME_JWT)
-    console.log(app.config.appMiddleware, "appMiddleware")
+    const MIDDLEWARE_NAME_ERRORHANDLER = "errorHandler"
 
+    const jwtIndex = app.config.appMiddleware.indexOf(MIDDLEWARE_NAME_JWT)
+    const errIndex = app.config.appMiddleware.indexOf(MIDDLEWARE_NAME_ERRORHANDLER)
     // jwt 中间件后置在统一异常处理之后
-    if (index1 == 0) {
+    if (jwtIndex == 0) {
       console.log("jwt在第一位")
-
-      app.config.appMiddleware.splice(index1, 1)
-      console.log(app.config.appMiddleware, "appMiddleware")
-
-      app.config.appMiddleware.push(MIDDLEWARE_NAME_JWT)
+      app.config.appMiddleware.splice(errIndex + 1, 0, MIDDLEWARE_NAME_JWT)
+      app.config.appMiddleware.splice(jwtIndex, 1)
       console.log(app.config.appMiddleware, "appMiddleware")
     }
   }

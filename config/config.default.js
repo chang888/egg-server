@@ -72,7 +72,7 @@ module.exports = appInfo => {
     secret: "Great4-M",
     enable: true, // default is false
     // match: [/^\/api/] // optional
-    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback", "/auth/jwt/login"] // 哪些请求不需要认证
+    ignore: ["/api/v1/test/", "/public/", "/wx/authorize", "/wx/callback", "/auth/jwt/login", "/wx/third/authorize"] // 哪些请求不需要认证
   }
   // add your user config here
   config.wxConfig = {
@@ -80,6 +80,12 @@ module.exports = appInfo => {
       appid: "wxd96c29c25fcd4c28",
       appsecret: "982817c5b666d6440007b2d99c454603",
       token: "zhengjinbin",
+      encodingAESKey: "45yhmc8slMFvxeJM8z7ThzeiBO62dUZKS1pbDNVhIHu"
+    },
+    openthird: {
+      appid: "wx63b29481682ccfd8",
+      appsecret: "b19e51c6b40cceef1514f59b0e2c96a5",
+      token: "zjb",
       encodingAESKey: "45yhmc8slMFvxeJM8z7ThzeiBO62dUZKS1pbDNVhIHu"
     },
     gzhtest: {
