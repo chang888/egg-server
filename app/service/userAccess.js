@@ -33,8 +33,8 @@ class UserAccessService extends Service {
   async current() {
     const { ctx, service } = this
     // ctx.state.user 可以提取到JWT编码的data
-    const uid = ctx.state.user.data._id
-    const user = await service.user.find(uid)
+    const uid = ctx.state.user.data.uid
+    const user = await service.user.findOne({ where: uid })
     if (!user) {
       ctx.throw(404, "用户不存在")
     }

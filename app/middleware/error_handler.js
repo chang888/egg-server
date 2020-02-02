@@ -25,7 +25,7 @@ module.exports = (option, app) => {
       // 全局egg-validate未通过处理
       if (status === 422) {
         delete ctx.body.error
-        console.log(status, "校验未通过的filed", err.errors)
+        // console.log(status, "校验未通过的filed", err.errors)
         // 未通过校验项
         const validateName = ctx.gettext(err.errors[0].field)
         // ctx.gettext egg-I18n插件加载

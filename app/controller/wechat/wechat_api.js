@@ -25,16 +25,11 @@ class WechatApiController extends Controller {
     const { appid, appsecret } = app.config.wxConfig.gzhtest
     const oauth = new OAuth(appid, appsecret)
     const state = ctx.query.id
-    console.log("ctx..." + ctx.href)
     let redirectUrl = ctx.href
     let callbackUrl = ctx.query.callbackUrl
     redirectUrl = redirectUrl.replace("/wx/authorize", "/wx/callback")
-    console.log(redirectUrl, "redirectUrl")
-
     const scope = "snsapi_userinfo"
     const url = oauth.getAuthorizeURL(redirectUrl, state, scope)
-    console.log("url=======" + url)
-    // ctx.body = url
     ctx.redirect(url + "&callback" + callbackUrl)
   }
   /**
@@ -49,9 +44,7 @@ class WechatApiController extends Controller {
     const oauth = new OAuth(appid, appsecret)
     const code = ctx.query.code
     let callbackUrl = ctx.query.callbackUrl
-    console.log("wxCallback code", code, callbackUrl)
     const tokenData = await oauth.getAccessToken(code)
-    console.log(tokenData, "成功的token")
     const openid = tokenData.data.openid
     // 根据openid查找用户
     let user = await ctx.model.User.findOne({ where: { openid } })

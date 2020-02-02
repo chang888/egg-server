@@ -68,6 +68,15 @@ module.exports = appInfo => {
     logging: true,
     timezone: "+08:00"
   }
+  // redis
+  config.redis = {
+    client: {
+      host: "r-bp1a18a0b7e13ea4pd.redis.rds.aliyuncs.com",
+      port: 6379,
+      password: "Chang789",
+      db: "0"
+    }
+  }
   config.jwt = {
     secret: "Great4-M",
     enable: true, // default is false

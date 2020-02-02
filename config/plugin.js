@@ -24,6 +24,11 @@ module.exports = {
     enable: true,
     package: "egg-sequelize"
   },
+  //redis
+  redis: {
+    enable: true,
+    package: "egg-redis"
+  },
   bcrypt: {
     enable: true,
     package: "egg-bcrypt"
