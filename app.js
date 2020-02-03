@@ -48,9 +48,10 @@ class AppBootHook {
     // Worker is ready, can do some things
     // don't need to block the app boot.
     const ctx = await this.app.createAnonymousContext()
-    // let rs = await ctx.service.wechat.wechatOpenthird.setAccessToken("wx63b29481682ccfd8")
-    let rs = await ctx.service.wechat.wechatOpenthird.componentLogin({ component_appid: "wx63b29481682ccfd8", redirect_uri: "http://changtest.free.idcfengye.com/index.html" })
-    console.log(rs, "didready")
+    // let rs = await ctx.service.wechat.wechatOpenthird.getAuthorizerInfo("wx63b29481682ccfd8", "wxd96c29c25fcd4c28")
+    // let rs = await ctx.service.wechat.wechatOpenthird.getAccessToken("wx63b29481682ccfd8")
+    // let rs = await ctx.service.wechat.wechatOpenthird.componentLogin({ component_appid: "wx63b29481682ccfd8", redirect_uri: "http://changtest.free.idcfengye.com/index.html" })
+    // console.log(rs, "didready")
 
     const run = async ctx => {
       console.log("========Init Data=========")

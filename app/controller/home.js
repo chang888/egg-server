@@ -11,7 +11,7 @@ class HomeController extends Controller {
   /**
    * @summary 测试接口
    * @description 测试接口
-   * @router get /
+   * @router get /test/login
    * @response 200 baseResponse ok
    */
   async index() {
