@@ -7,22 +7,51 @@ const wechat = require("../../utils/openthird_wechat")
  */
 class OpenthirdController extends Controller {
   /**
-   * @summary 第三方消息与事件接收URL
-   * @description 消息与事件接收URL
+   * @summary 第三方授权事件接收URL
+   * @description 第三方授权事件接收URL
+   * @router all /wx/third/authorize
+   */
+  async authorizeCallback() {
+    const { ctx, app } = this
+    let { openthird } = app.config.wxConfig
+    await wechat(openthird).middleware(async (message, ctx) => {
+      console.log(message, "收到的消息")
+      // 授权变更通知推送
+      const type = message.InfoType
+      // 授权成功
+      if (type == "authorized") {
+        return "success"
+      }
+      // 更新授权
+      if (type == "updateauthorized") {
+        return "success"
+      }
+      // 取消授权
+      if (type == "unauthorized") {
+        return "success"
+      }
+      if (message.Content == "爱你") {
+        return "我也爱你"
+      }
+    })(ctx)
+  }
+
+  /**
+   * @summary 授权后消息与事件接收URL
+   * @description 授权后消息与事件接收URL
    * @router all /wx/third/news/callback/:appid
    */
   async newsCallback() {
     const { ctx, app } = this
     let { appid } = ctx.params
-    console.log(appid, "所带参数")
     let { openthird } = app.config.wxConfig
-    console.log(openthird)
-    // openthird.appid = appid
-    // console.log("新", openthird)
-
-    let rs = await wechat(openthird).middleware(async (message, ctx) => {
+    await wechat(openthird).middleware(async (message, ctx) => {
       console.log(message, "收到的消息")
-      if (message.Content == "爱你") return "我也爱你"
+      // 授权变更通知推送
+      const type = message.InfoType
+      if (message.Content == "爱你") {
+        return "我也爱你"
+      }
     })(ctx)
   }
 

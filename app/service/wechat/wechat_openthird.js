@@ -39,8 +39,7 @@ class WechatOpenthird extends Service {
    */
   async setAccessToken(component_appid) {
     const { ctx, app } = this
-    const openthird = await ctx.model.Openthird.findOne({ where: { component_appid } })
-    if (!openthird) ctx.throw(404, "第三方平台未找到")
+    const openthird = await this.findByAppid(component_appid)
     const { component_appsecret, component_verify_ticket } = openthird
     let rs = await app.curl(`https://api.weixin.qq.com/cgi-bin/component/api_component_token`, {
       method: "POST",
@@ -49,13 +48,13 @@ class WechatOpenthird extends Service {
     })
     if (!rs.data.component_access_token) {
       // 微信抛出的异常
-      ctx.throw(408, `errxode: ${rs.data.errcode} ,errmsg: ${rs.data.errmsg}`)
+      ctx.throw(408, `errcode: ${rs.data.errcode} ,errmsg: ${rs.data.errmsg}`)
     }
     const { component_access_token } = rs.data
-    await openthird.update({ component_access_token })
     await app.redis.set(`openthird${component_appid}component_access_token`, component_access_token, "EX", rs.data.expires_in)
+    await openthird.update({ component_access_token })
     ctx.logger.info(`更新openthird 第三方平台appid ${component_appid} `)
-    return rs.data
+    return rs.data.component_access_token
   }
 
   /**
@@ -66,10 +65,10 @@ class WechatOpenthird extends Service {
   async getAccessToken(component_appid) {
     const { app } = this
     let component_access_token = await app.redis.get(`openthird${component_appid}component_access_token`)
-    console.log("从redis取component_access_token")
+    console.log("从redis取component_access_token", component_access_token)
 
     if (!component_access_token) {
-      component_access_token = await this.setAccessToken(component_appid).component_access_token
+      component_access_token = await this.setAccessToken(component_appid)
     }
     return component_access_token
   }
@@ -80,8 +79,9 @@ class WechatOpenthird extends Service {
    */
   async setPreAuthCode(component_appid) {
     const { ctx, app } = this
-    const openthird = await this.findByAppid(component_appid)
-    const { component_access_token } = openthird
+    const component_access_token = await this.getAccessToken(component_appid)
+    // const openthird = await this.findByAppid(component_appid)
+    // const { component_access_token } = openthird
     const url = `https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=${component_access_token}`
     // 获取预授权码
     const rs = await ctx.curl(url, {
@@ -91,10 +91,11 @@ class WechatOpenthird extends Service {
     })
     if (!rs.data.pre_auth_code) {
       // 微信抛出的异常
-      ctx.throw(408, `errxode: ${rs.data.errcode} ,errmsg: ${rs.data.errmsg}`)
+      ctx.throw(408, `errcode: ${rs.data.errcode} ,errmsg: ${rs.data.errmsg}`)
+      return
     }
     await app.redis.set(`openthird${component_appid}PreAuthCode`, rs.data.pre_auth_code, "EX", 600)
-    return rs.data
+    return rs.data.pre_auth_code
   }
 
   /**
@@ -106,8 +107,14 @@ class WechatOpenthird extends Service {
   async componentLogin({ component_appid, redirect_uri, auth_type = 3 }) {
     const { ctx, app } = this
     let pre_auth_code = await app.redis.get(`openthird${component_appid}PreAuthCode`)
+    console.log("redis", pre_auth_code)
+
     if (!pre_auth_code) {
-      pre_auth_code = await this.setPreAuthCode(component_appid).pre_auth_code
+      pre_auth_code = await this.setPreAuthCode(component_appid)
+      console.log("从数据库度", pre_auth_code)
+    }
+    if (!pre_auth_code) {
+      ctx.throw(408, "pre_auth_code不存在")
     }
     const url = `https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=${component_appid}&pre_auth_code=${pre_auth_code}&redirect_uri=${redirect_uri}&auth_type=${auth_type}`
     return url

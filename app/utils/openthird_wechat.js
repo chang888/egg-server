@@ -287,7 +287,7 @@ class Wechat {
         // 注意不要在业务逻辑中操作 body、type
         const body = await handle(formatted, ctx)
         // 第三方平台 全网发布
-        console.log(body, "回复的消息")
+        console.log(290, body, "回复的消息")
         /*
          * 假如服务器无法保证在五秒内处理并回复，可以直接回复空串。
          * 微信服务器不会对此作任何处理，并且不会发起重试。
@@ -299,6 +299,7 @@ class Wechat {
           return
         }
         if (body === "success") {
+          console.log("回复success")
           ctx.body = "success"
           ctx.status = 200
           return

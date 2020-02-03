@@ -38,23 +38,23 @@ module.exports = app => {
   //   }
   //   return "发送了" + message.Content
   // })
-  WechatInterfaceController.prototype.openthird = wechat(app.config.wxConfig.openthird).middleware(async (message, ctx) => {
-    console.log(`message: ${JSON.stringify(message)}`)
-    if (message.InfoType == "component_verify_ticket") {
-      let rs = await ctx.model.Openthird.findOne({
-        where: {
-          component_appid: message.AppId
-        }
-      })
-      await rs.update({ component_verify_ticket: message.ComponentVerifyTicket })
-      // ctx.service.wechat.
-      if (rs.component_access_token === null) app.runSchedule("update_openthirds_accesstoken")
-      return "success"
+  // WechatInterfaceController.prototype.openthird = wechat(app.config.wxConfig.openthird).middleware(async (message, ctx) => {
+  //   console.log(`message: ${JSON.stringify(message)}`)
+  //   if (message.InfoType == "component_verify_ticket") {
+  //     let rs = await ctx.model.Openthird.findOne({
+  //       where: {
+  //         component_appid: message.AppId
+  //       }
+  //     })
+  //     await rs.update({ component_verify_ticket: message.ComponentVerifyTicket })
+  //     // ctx.service.wechat.
+  //     if (rs.component_access_token === null) app.runSchedule("update_openthirds_accesstoken")
+  //     return "success"
 
-      // ctx.body = "success"
-    }
-    return "发送了" + message.Content
-  })
+  //     // ctx.body = "success"
+  //   }
+  //   return "发送了" + message.Content
+  // })
 
   // WechatInterfaceController.prototype = res => {
   //   console.log(app)
