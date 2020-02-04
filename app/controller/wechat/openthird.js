@@ -30,6 +30,13 @@ class OpenthirdController extends Controller {
       if (type == "unauthorized") {
         return "success"
       }
+      // 10分钟的票据推送
+      if (type == "component_verify_ticket") {
+        let openthird = await ctx.service.wechat.wechatOpenthird.findByAppid(message.AppId)
+        await openthird.update({ component_verify_ticket: message.ComponentVerifyTicket })
+        if (openthird.component_access_token === null) app.runSchedule("update_openthirds_accesstoken")
+        return "success"
+      }
       if (message.Content == "爱你") {
         return "我也爱你"
       }
