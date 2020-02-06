@@ -8,7 +8,6 @@ class UserService extends Service {
   async create(payload) {
     const { ctx } = this
     // const { mobile = "", mid = 1, openid = "" } = payload
-
     // payload.password = await this.ctx.genHash(payload.password)
     return ctx.model.User.create(payload)
   }

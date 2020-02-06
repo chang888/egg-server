@@ -66,7 +66,6 @@ class WechatOpenthird extends Service {
     const { app } = this
     let component_access_token = await app.redis.get(`openthird${component_appid}component_access_token`)
     console.log("从redis取component_access_token", component_access_token)
-
     if (!component_access_token) {
       component_access_token = await this.setAccessToken(component_appid)
     }

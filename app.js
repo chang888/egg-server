@@ -57,48 +57,200 @@ class AppBootHook {
       console.log("========Init Data=========")
       const { STRING, DATE, BIGINT, ENUM } = this.app.Sequelize
 
-      console.log("销毁user表")
-      await ctx.model.queryInterface.dropTable("cc_users")
-      console.log("销毁user表成功")
+      // console.log("销毁user表")
+      // await ctx.model.queryInterface.dropTable("cc_users")
+      // console.log("销毁user表成功")
 
-      console.log("创建user表")
+      // console.log("创建user表")
+      // try {
+      //   await ctx.model.queryInterface.createTable(
+      //     "cc_users",
+      //     {
+      //       uid: {
+      //         type: BIGINT(20),
+      //         primaryKey: true,
+      //         autoIncrement: true,
+      //         comment: "用户id"
+      //       },
+      //       mid: {
+      //         type: BIGINT(20),
+      //         default: 1,
+      //         allowNull: false,
+      //         comment: "所属商户"
+      //       },
+      //       mobile: {
+      //         type: STRING(50),
+      //         comment: "手机号"
+      //       },
+      //       openid: {
+      //         type: STRING(50),
+      //         comment: "微信公众平台用户标识"
+      //       },
+      //       unionid: {
+      //         type: STRING(50),
+      //         comment: "微信开放平台唯一用户标识"
+      //       },
+      //       nickname: {
+      //         type: STRING(100),
+      //         comment: "昵称"
+      //       },
+      //       sex: {
+      //         type: ENUM,
+      //         values: ["0", "1", "2"],
+      //         defaultValue: "0",
+      //         comment: "0/未设置 1男 2女"
+      //       },
+      //       state: {
+      //         type: ENUM,
+      //         values: ["0", "1"],
+      //         defaultValue: "1",
+      //         comment: "0/无效 1有效"
+      //       },
+      //       created_at: DATE,
+      //       updated_at: DATE,
+      //       deleted_at: DATE
+      //     },
+      //     {
+      //       created_at: "create_time",
+      //       updated_at: "update_time",
+      //       deleted_at: "delete_time",
+      //       paranoid: true,
+      //       getterMethods: {
+      //         createTime() {
+      //           // @ts-ignore
+      //           return new Date(this.getDataValue("create_time")).getTime()
+      //         },
+      //         updateTime() {
+      //           // @ts-ignore
+      //           return new Date(this.getDataValue("update_time")).getTime()
+      //         }
+      //       }
+      //     }
+      //   )
+      //   console.log("建表users成功")
+      // } catch (err) {
+      //   console.log("创建user表error", err)
+      //   return
+      // }
+      // console.log("新建模拟数据")
+      //   try {
+      //     let res = await ctx.service.user.create({
+      //       mobile: "15057631272",
+      //       nickname: "常"
+      //     })
+      //     console.log("新建模拟数据成功")
+      //   } catch (err) {
+      //     console.log("新建模拟数据err", err)
+      //   }
+      // console.log("Openthird")
+      // console.log("销毁Openthird表")
+      // await ctx.model.queryInterface.dropTable("cc_openthirds")
+      // console.log("销毁Openthird表成功")
+      // console.log("创建Openthird表")
+      // try {
+      //   await ctx.model.queryInterface.createTable(
+      //     "cc_openthirds",
+      //     {
+      //       id: {
+      //         type: BIGINT(20),
+      //         primaryKey: true,
+      //         autoIncrement: true,
+      //         comment: "id"
+      //       },
+      //       name: {
+      //         type: STRING(20),
+      //         allowNull: false,
+      //         comment: "服务商名字"
+      //       },
+      //       component_appid: {
+      //         type: STRING(20),
+      //         allowNull: false,
+      //         unique: true,
+      //         primaryKey: true,
+      //         comment: "第三方appid"
+      //       },
+      //       component_appsecret: {
+      //         type: STRING(50),
+      //         allowNull: false,
+      //         comment: "第三方appsecret"
+      //       },
+      //       component_verify_ticket: {
+      //         type: STRING(255),
+      //         comment: "验证票据,微信每10分钟发送一次,有效时间较长"
+      //       },
+      //       component_access_token: {
+      //         type: STRING,
+      //         comment: "调用凭据令牌,有效期2小时"
+      //       },
+      //       created_at: DATE,
+      //       updated_at: DATE,
+      //       deleted_at: DATE
+      //     },
+      //     {
+      //       created_at: "create_time",
+      //       updated_at: "update_time",
+      //       deleted_at: "delete_time",
+      //       paranoid: true,
+      //       getterMethods: {
+      //         createTime() {
+      //           // @ts-ignore
+      //           return new Date(this.getDataValue("create_time")).getTime()
+      //         },
+      //         updateTime() {
+      //           // @ts-ignore
+      //           return new Date(this.getDataValue("update_time")).getTime()
+      //         }
+      //       }
+      //     }
+      //   )
+      //   console.log("建表Openthird成功")
+      // } catch (err) {
+      //   console.log("创建Openthird表error", err)
+      //   return
+      // }
+
+      // console.log("新建模拟数据Openthird")
+      // try {
+      //   let res = await ctx.model.Openthird.create({
+      //     component_appid: "wx63b29481682ccfd8",
+      //     component_appsecret: "b19e51c6b40cceef1514f59b0e2c96a5",
+      //     name: "常常服务商test"
+      //   })
+      //   console.log("新建模拟数据成功Openthird")
+      // } catch (err) {
+      //   console.log("新建模拟数据Openthirderr", err)
+      // }
+      console.log("销毁merchant表")
+      // await ctx.model.queryInterface.dropTable("cc_merchants")
+      console.log("销毁merchant表成功")
+      console.log("创建merchant表")
       try {
         await ctx.model.queryInterface.createTable(
-          "cc_users",
+          "cc_merchants",
           {
-            uid: {
+            mid: {
               type: BIGINT(20),
               primaryKey: true,
               autoIncrement: true,
-              comment: "用户id"
+              comment: "商户id"
             },
-            mid: {
-              type: BIGINT(20),
-              default: 1,
-              allowNull: false,
-              comment: "所属商户"
-            },
-            mobile: {
-              type: STRING(50),
-              comment: "手机号"
-            },
-            openid: {
-              type: STRING(50),
-              comment: "微信公众平台用户标识"
-            },
-            unionid: {
-              type: STRING(50),
-              comment: "微信开放平台唯一用户标识"
-            },
-            nickname: {
+            mname: {
               type: STRING(100),
-              comment: "昵称"
+              allowNull: false,
+              comment: "商户名称"
             },
-            sex: {
-              type: ENUM,
-              values: ["0", "1", "2"],
-              defaultValue: "0",
-              comment: "0/未设置 1男 2女"
+            appid: {
+              type: STRING(50),
+              unique: true,
+              comment: ""
+            },
+            access_token: {
+              type: STRING(255),
+              comment: ""
+            },
+            refresh_token: {
+              type: STRING(255),
+              comment: ""
             },
             state: {
               type: ENUM,
@@ -127,99 +279,17 @@ class AppBootHook {
             }
           }
         )
-        console.log("建表users成功")
+        console.log("建表cc_merchant成功")
       } catch (err) {
-        console.log("创建user表error", err)
+        console.log("创建cc_merchant表error", err)
         return
       }
-      // await ctx.model.User.destroy()
-      // console.log("新建模拟数据")
-      //   try {
-      //     let res = await ctx.service.user.create({
-      //       mobile: "15057631272",
-      //       nickname: "常"
-      //     })
-      //     console.log("新建模拟数据成功")
-      //   } catch (err) {
-      //     console.log("新建模拟数据err", err)
-      //   }
-      // console.log("Openthird")
-      await ctx.model.queryInterface.dropTable("cc_openthirds")
-      console.log("销毁Openthird表成功")
-      console.log("创建Openthird表")
-      try {
-        await ctx.model.queryInterface.createTable(
-          "cc_openthirds",
-          {
-            id: {
-              type: BIGINT(20),
-              primaryKey: true,
-              autoIncrement: true,
-              comment: "id"
-            },
-            name: {
-              type: STRING(20),
-              allowNull: false,
-              comment: "服务商名字"
-            },
-            component_appid: {
-              type: STRING(20),
-              allowNull: false,
-              unique: true,
-              primaryKey: true,
-              comment: "第三方appid"
-            },
-            component_appsecret: {
-              type: STRING(50),
-              allowNull: false,
-              comment: "第三方appsecret"
-            },
-            component_verify_ticket: {
-              type: STRING(255),
-              comment: "验证票据,微信每10分钟发送一次,有效时间较长"
-            },
-            component_access_token: {
-              type: STRING,
-              comment: "调用凭据令牌,有效期2小时"
-            },
-            created_at: DATE,
-            updated_at: DATE,
-            deleted_at: DATE
-          },
-          {
-            created_at: "create_time",
-            updated_at: "update_time",
-            deleted_at: "delete_time",
-            paranoid: true,
-            getterMethods: {
-              createTime() {
-                // @ts-ignore
-                return new Date(this.getDataValue("create_time")).getTime()
-              },
-              updateTime() {
-                // @ts-ignore
-                return new Date(this.getDataValue("update_time")).getTime()
-              }
-            }
-          }
-        )
-        console.log("建表Openthird成功")
-      } catch (err) {
-        console.log("创建Openthird表error", err)
-        return
-      }
-
-      console.log("新建模拟数据Openthird")
-      try {
-        let res = await ctx.model.Openthird.create({
-          component_appid: "wx63b29481682ccfd8",
-          component_appsecret: "b19e51c6b40cceef1514f59b0e2c96a5",
-          name: "常常服务商test"
-        })
-        console.log("新建模拟数据成功Openthird")
-      } catch (err) {
-        console.log("新建模拟数据Openthirderr", err)
-      }
+      console.log("新建模拟数据cc_merchant")
+      let res = await ctx.model.Merchant.create({
+        mname: "常常遇见在家测试",
+        appid: "wxd96c29c25fcd4c28"
+      })
+      console.log("新建模拟数据成功cc_merchant", res)
     }
     // run(ctx)
   }

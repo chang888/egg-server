@@ -1,42 +1,28 @@
 module.exports = app => {
   const { STRING, DATE, BIGINT, ENUM } = app.Sequelize
 
-  const User = app.model.define(
-    "cc_users",
+  const Merchant = app.model.define(
+    "cc_merchants",
     {
-      uid: {
+      mid: {
         type: BIGINT(20),
         primaryKey: true,
         autoIncrement: true,
-        comment: "用户id"
+        comment: "商户id"
       },
-      mid: {
-        type: BIGINT(20),
-        defaultValue: 1,
-        allowNull: false,
-        comment: "所属商户"
-      },
-      mobile: {
-        type: STRING(50),
-        comment: "手机号"
-      },
-      openid: {
-        type: STRING(50),
-        comment: "微信公众平台用户标识"
-      },
-      unionid: {
-        type: STRING(50),
-        comment: "微信开放平台唯一用户标识"
-      },
-      nickname: {
+      mname: {
         type: STRING(100),
-        comment: "昵称"
+        comment: "商户名称",
+        allowNull: false
       },
-      sex: {
-        type: ENUM,
-        values: ["0", "1", "2"],
-        defaultValue: "0",
-        comment: "0/未设置 1男 2女"
+      appid: {
+        type: STRING(50),
+        comment: "",
+        unique: true
+      },
+      access_token: {
+        type: STRING(255),
+        comment: ""
       },
       state: {
         type: ENUM,
@@ -65,5 +51,5 @@ module.exports = app => {
       }
     }
   )
-  return User
+  return Merchant
 }
