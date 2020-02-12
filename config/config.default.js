@@ -81,7 +81,19 @@ module.exports = appInfo => {
     secret: "Great4-M",
     enable: true, // default is false
     // match: [/^\/api/] // optional
-    ignore: ["/test", "/wx/third", "/wechat/wechatInterface/wechat", "/api/v1/test/", "/public/", "/js", "/wx/authorize", "/wx/callback", "/auth/jwt/login"] // 哪些请求不需要认证
+    ignore: [
+      "/test",
+      "/wx/third",
+      "/merchant/bindmpcallback",
+      "/wechat/wechatInterface/wechat",
+      "/api/v1/test/",
+      "/public/",
+      "/js",
+      "/wx/authorize",
+      "/wx/callback",
+      "/auth/jwt/login",
+      "/swagger-ui.html"
+    ] // 哪些请求不需要认证
   }
   // add your user config here
   config.wxConfig = {

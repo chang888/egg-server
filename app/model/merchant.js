@@ -24,6 +24,10 @@ module.exports = app => {
         type: STRING(255),
         comment: ""
       },
+      refresh_token: {
+        type: STRING(255),
+        comment: ""
+      },
       state: {
         type: ENUM,
         values: ["0", "1"],

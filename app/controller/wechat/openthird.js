@@ -67,7 +67,7 @@ class OpenthirdController extends Controller {
    * @description 生成申请授权url
    * @router post /wx/third/componentlogin
    * @request body string component_appid eg:1 第三方appid
-   * @request body string redirect_uri eg:1 回调url
+   * @request body string redirect_uri eg:http://baidu.com 回调url
    * @response 200 baseResponse http://....
    */
   async componentlogin() {

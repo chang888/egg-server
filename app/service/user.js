@@ -116,7 +116,7 @@ class UserService extends Service {
    * 根据手机号查找
    * @param {*} mobile
    */
-  async findByMobileAndMid(mobile, mid) {
+  async findByMobileAndMid({ mobile, mid }) {
     return this.ctx.model.User.findOne({ where: { mobile, mid } })
   }
 

@@ -13,9 +13,14 @@ module.exports = {
   "Welcome back, %s!": "欢迎回来，%s!",
   "Hello %s, how are you today?": "你好 %s, 今天过得咋样？",
   "should match": "不符合规则",
+  "should be a number": "必须是数字",
+  "should be an integer": "必须是整数",
+  "should be one of": "的内容必须是",
   "Validation Failed": "未通过校验",
   "No authorization token was found": "请先登录",
   "jwt expired": "登录信息已失效",
   "jwt malformed": "登录信息已失效",
-  "Format is Authorization: Bearer [token]": "token格式不正确"
+  "Format is Authorization: Bearer [token]": "token格式不正确",
+  mname: "商户名",
+  mid: "商户ID "
 }

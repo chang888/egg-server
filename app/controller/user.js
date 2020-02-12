@@ -23,6 +23,8 @@ class UserController extends Controller {
     const { mobile } = payload
     let mid
     const data = { mobile, mid: mid ? mid : 1 }
+    console.log(data)
+
     // const user = await service.user.findByMobileAndMid(mobile, mid)
     const user = await service.user.findOne(data)
     if (user) ctx.throw(409, "该手机号已注册")

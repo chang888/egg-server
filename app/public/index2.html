@@ -21,7 +21,12 @@
       <div><a href="https://www.easy-mock.com/project/5ce3669a733e8967c7b2e902">EasyMock地址</a></div>
       <div>
         <input type="text" v-model="mobile" />
+        <input type="text" v-model="mname" />
+        <input type="text" v-model="mid" />
+        <a target="_blank" :href="url">点击授权连接{{url}}</a>
         <el-button @click="create">创建用户</el-button>
+        <el-button @click="createMerchant">创建商户</el-button>
+        <el-button @click="MerchantBind">商户绑定MP</el-button>
         <el-button @click="list">用户列表</el-button>
         <el-button @click="del">删除用户</el-button>
       </div>
@@ -61,9 +66,23 @@
         data: {
           value: "input",
           token: {},
-          mobile: "150"
+          mname: "",
+          mobile: "150",
+          mid: 3,
+          url: ""
         },
         methods: {
+          async createMerchant() {
+            const res = await axios.post("/merchant/create", { mname: this.mname })
+          },
+          async MerchantBind() {
+            console.log(typeof this.mid)
+
+            const res = await axios.post("/merchant/bindmp", { mid: Number(this.mid) })
+            if (res.data.code == 0) {
+              this.url = res.data.data
+            }
+          },
           async create() {
             await axios.post("/api/user/create", {
               mobile: this.mobile,

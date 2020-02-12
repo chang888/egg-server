@@ -65,7 +65,7 @@ class WechatOpenthird extends Service {
   async getAccessToken(component_appid) {
     const { app } = this
     let component_access_token = await app.redis.get(`openthird${component_appid}component_access_token`)
-    console.log("从redis取component_access_token", component_access_token)
+    // console.log("从redis取component_access_token", component_access_token)
     if (!component_access_token) {
       component_access_token = await this.setAccessToken(component_appid)
     }
@@ -137,6 +137,19 @@ class WechatOpenthird extends Service {
     const url = `https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=${component_access_token}`
     const res = await ctx.curl(url, { method: "POST", dataType: "json", data: JSON.stringify({ component_appid, authorizer_appid }) })
     console.log(res.data.authorization_info)
+    return res.data.authorization_info
+  }
+  /**
+   * 使用授权码获取授权信息
+   * @param {*}component_access_token 令牌
+   * @param {*} component_appid 第三方appid
+   * @param {*} authorization_code 授权码
+   */
+  async apiQueryAuth(component_appid, authorization_code) {
+    const { ctx, app } = this
+    const component_access_token = await this.getAccessToken(component_appid)
+    const url = `https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=${component_access_token}`
+    const res = await ctx.curl(url, { method: "POST", dataType: "json", data: JSON.stringify({ component_appid, authorization_code }) })
     return res.data.authorization_info
   }
 }
