@@ -4,8 +4,8 @@ class UserAccessService extends Service {
     const { ctx, service } = this
 
     const { mobile } = payload
-    let mid
-    const data = { mobile, mid: mid ? mid : 1 }
+    let mid = 1
+    const data = { mobile, mid }
     let user = await service.user.findByMobileAndMid(data)
     if (!user) {
       ctx.throw(404, "该手机号尚未注册")

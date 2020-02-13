@@ -15,6 +15,7 @@ class MerchantController extends Controller {
    */
   async create() {
     const { ctx, service } = this
+    ctx.throw({ code: 800, message: "任意code" })
     const payload = ctx.request.body || {}
     ctx.validate(ctx.rule.createMerchantRequest)
     const { mname } = payload
