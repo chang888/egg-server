@@ -15,13 +15,15 @@ module.exports = {
     type: "worker" // 指定所有的 worker 都需要执行
   },
   async task(ctx) {
-    const { appid } = ctx.app.config.wxConfig.openthird
-    await ctx.service.wechat.wechatOpenthird.setAccessToken(appid)
+    const Merchants = await ctx.model.Merchant.findAll()
+    // console.log(Merchants)
+    Merchants.forEach(async item => {
+      console.log(21, item)
 
-    // const openthirds = await ctx.model.Openthird.findAll()
-    // // console.log(openthirds)
-    // openthirds.forEach(async item => {
-    //   // 设置Openthird AccessToken
-    // })
+      let rs = await ctx.service.merchant.setAccessToken(item.appid)
+      // console.log(`定时更新${item.appid}accessToken`, rs)
+
+      // ctx.service.user.create({ mobile: 15057631272 })
+    })
   }
 }

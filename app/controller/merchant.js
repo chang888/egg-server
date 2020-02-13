@@ -61,8 +61,9 @@ class MerchantController extends Controller {
     const component_appid = "wx63b29481682ccfd8"
 
     console.log("auth_code")
-    // 使用授权码获取
+    // 使用授权码获取授权方信息
     let res = await ctx.service.wechat.wechatOpenthird.apiQueryAuth(component_appid, auth_code)
+    // 查找商户
     let merchant = await ctx.service.merchant.findByMid(mid)
     console.log(merchant)
     if (!merchant) {

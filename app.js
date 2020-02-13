@@ -42,12 +42,14 @@ class AppBootHook {
 
   async didReady() {
     // this.app.runSchedule("update_openthirds_accesstoken")
-
     // const assert = require("assert")
 
     // Worker is ready, can do some things
     // don't need to block the app boot.
     const ctx = await this.app.createAnonymousContext()
+    // let res = await ctx.service.merchant.getAccessToken("wxd96c29c25fcd4c28")
+    // console.log(res, "51")
+
     // let rs = await ctx.service.wechat.wechatOpenthird.getAuthorizerInfo("wx63b29481682ccfd8", "wxd96c29c25fcd4c28")
     // let rs = await ctx.service.wechat.wechatOpenthird.setAccessToken("wx63b29481682ccfd8")
     // let rs = await ctx.service.wechat.wechatOpenthird.componentLogin({ component_appid: "wx63b29481682ccfd8", redirect_uri: "http://changtest.free.idcfengye.com/index.html" })

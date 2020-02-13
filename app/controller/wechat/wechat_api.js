@@ -22,7 +22,7 @@ class WechatApiController extends Controller {
    */
   async wxAuthorize() {
     const { ctx, app } = this
-    const { appid, appsecret } = app.config.wxConfig.gzhtest
+    const { appid, appsecret } = app.config.wxConfig.gzh
     const oauth = new OAuth(appid, appsecret)
     const state = ctx.query.id
     let redirectUrl = ctx.href
@@ -40,7 +40,7 @@ class WechatApiController extends Controller {
    */
   async callback() {
     const { ctx, app, service } = this
-    const { appid, appsecret } = app.config.wxConfig.gzhtest
+    const { appid, appsecret } = app.config.wxConfig.gzh
     const oauth = new OAuth(appid, appsecret)
     const code = ctx.query.code
     let callbackUrl = ctx.query.callbackUrl
