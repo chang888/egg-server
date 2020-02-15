@@ -180,18 +180,18 @@ class Wechat {
 
   middleware(handle) {
     if (this.encodingAESKey) {
-      console.log(this.token, this.encodingAESKey, this.appid)
+      // console.log(this.token, this.encodingAESKey, this.appid)
       this.cryptor = new WXBizMsgCrypt(this.token, this.encodingAESKey, this.appid)
     }
     // console.log("马上执行cryptor",this.cryptor);
     return async (ctx, next) => {
-      console.log("收到请求ctx", ctx)
+      // console.log("收到请求ctx", ctx)
       const query = ctx.query
-      console.log("请求参数", query)
+      // console.log("请求参数", query)
 
       // 加密模式
       const encrypted = !!(query.encrypt_type && query.encrypt_type === "aes" && query.msg_signature)
-      console.log(encrypted, "-====encrypted加密模式")
+      // console.log(encrypted, "-====encrypted加密模式")
       const timestamp = query.timestamp
       const nonce = query.nonce
       const echostr = query.echostr
@@ -205,11 +205,11 @@ class Wechat {
         if (encrypted) {
           var signature = query.msg_signature
           valid = signature === CRYPTOR.getSignature(timestamp, nonce, echostr)
-          console.log("存在加密模式", valid)
+          // console.log("存在加密模式", valid)
         } else {
           // 校验
           valid = query.signature === getSignature(timestamp, nonce, TOKEN)
-          console.log("不存在加密模式", valid)
+          // console.log("不存在加密模式", valid)
         }
 
         if (!valid) {
@@ -221,19 +221,19 @@ class Wechat {
             // TODO 检查appId的正确性
             ctx.body = decrypted.message
           } else {
-            console.log("不存在加密模式输出body", echostr)
+            // console.log("不存在加密模式输出body", echostr)
             ctx.body = echostr
           }
         }
       } else if (method === "POST") {
-        console.log("进入post")
+        // console.log("进入post")
 
         if (!this.isDebug && !encrypted) {
-          console.log("非deg和非加密")
+          // console.log("非deg和非加密")
 
           // 校验
           if (query.signature !== getSignature(timestamp, nonce, TOKEN)) {
-            console.log("Invalid signature")
+            // console.log("Invalid signature")
 
             ctx.status = 401
             ctx.body = "Invalid signature"
@@ -252,17 +252,17 @@ class Wechat {
             limit: "1mb",
             encoding: ctx.request.charset || "utf-8"
           })
-          console.log(xml, "原始xml2")
+          // console.log(xml, "原始xml2")
         }
 
         // 保存原始xml
         ctx.weixin_xml = xml
         // 解析xml
         var result = await parseXML(xml)
-        console.log(result, "解析原始xml1")
+        // console.log(result, "解析原始xml1")
 
         var formatted = formatMessage(result.xml)
-        console.log(formatted, "formatted")
+        // console.log(formatted, "formatted")
 
         if (!this.isDebug && encrypted) {
           var encryptMessage = formatted.Encrypt
@@ -280,7 +280,7 @@ class Wechat {
           }
           var decodedXML = await parseXML(messageWrapXml)
           formatted = formatMessage(decodedXML.xml)
-          console.log("格式化过的XML", formatted)
+          // console.log("格式化过的XML", formatted)
         }
 
         // 业务逻辑处理

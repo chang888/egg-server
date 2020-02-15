@@ -22,7 +22,7 @@ class UserAccessService extends Service {
     //   ctx.throw(404, "用户名或者密码错误")
     // }
     // 生成Token令牌
-    return { token: await service.actionToken.apply(user.uid) }
+    return { token: await service.actionToken.apply(user.uid, user.mid) }
   }
   async logout() {}
 

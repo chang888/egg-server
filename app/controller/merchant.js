@@ -15,7 +15,7 @@ class MerchantController extends Controller {
    */
   async create() {
     const { ctx, service } = this
-    ctx.throw({ code: 800, message: "任意code" })
+    // ctx.throw({ code: 800, message: "任意code" })
     const payload = ctx.request.body || {}
     ctx.validate(ctx.rule.createMerchantRequest)
     const { mname } = payload
@@ -37,31 +37,37 @@ class MerchantController extends Controller {
    * @response 200 baseResponse 绑定成功
    */
   async bindMp() {
-    const { ctx, service } = this
+    const { ctx, service, app } = this
     ctx.validate(ctx.rule.merchantBindMpRequest)
     const payload = ctx.request.body || {}
-    const { mid } = payload
-    const component_appid = "wx63b29481682ccfd8"
-    const redirect_uri = ctx.href.replace("/merchant/bindmp", `/merchant/bindmpcallback?mid=${mid}&component_appid=${component_appid}`)
-    console.log(redirect_uri)
+    let { mid, callbackUrl } = payload
+    const { appid: component_appid } = app.config.wxConfig.openthird
+    callbackUrl = encodeURI(encodeURIComponent(callbackUrl))
+
+    console.log(callbackUrl, "=======222222")
+    // const component_appid = "wx63b29481682ccfd8"
+    const redirect_uri = ctx.href.replace("/merchant/bindmp", `/merchant/bindmpcallback/${callbackUrl}?mid=${mid}`)
+    console.log(redirect_uri, "回调地址")
     let res = await ctx.service.wechat.wechatOpenthird.componentLogin({ component_appid, redirect_uri })
     ctx.helper.success({ ctx, res, msg: "生成url成功" })
   }
   /**
    * @summary 商户绑定微信公众号回调
    * @description 商户绑定微信公众号回调
-   * @router get /merchant/bindmpcallback
+   * @router get /merchant/bindmpcallback/{callbackUrl}
    * @request header string *Authorization
+   * @request path string *callbackurl
    * @response 200 baseResponse 绑定成功
    */
+
   async bindMpCallback() {
     const { ctx, service, app } = this
-    console.log(ctx.query)
-
+    console.log("=============bindMpCallback", ctx.query, ctx.params)
+    const { callbackUrl } = ctx.params
     const { auth_code, mid } = ctx.query
-    const component_appid = "wx63b29481682ccfd8"
+    const { appid: component_appid } = app.config.wxConfig.openthird
+    console.log("==============", "bindMpCallback")
 
-    console.log("auth_code")
     // 使用授权码获取授权方信息
     let res = await ctx.service.wechat.wechatOpenthird.apiQueryAuth(component_appid, auth_code)
     // 查找商户
@@ -71,12 +77,12 @@ class MerchantController extends Controller {
       ctx.throw(404, "商户不存在")
     }
     console.log({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
-    await app.redis.set(`merchant${mid}authorizer_access_token`, res.authorizer_access_token, "EX", res.expires_in)
+    await (`merchant${mid}authorizer_access_token`, res.authorizer_access_token, "EX", res.expires_in)
 
     await merchant.update({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
     // await merchant.save()
-
-    ctx.helper.success({ ctx, res, msg: "生成url成功" })
+    ctx.redirect(callbackUrl)
+    // ctx.helper.success({ ctx, res, msg: "生成url成功" })
   }
 }
 

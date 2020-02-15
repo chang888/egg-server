@@ -76,21 +76,22 @@
             console.log("res", res)
           },
           async auth() {
-            window.location.href = `/wx/authorize?callbackUrl=${window.location.href}`
+            window.location.href = `/wx/openthird/authorize/wxd96c29c25fcd4c28?callbackUrl=${window.location.href}`
           },
           async getToken() {
             const qs = Qs.parse(window.location.search.substr(1))
-            let { token } = qs
-            console.log(token)
-            window.localStorage.setItem("token", token)
-            console.log("token", token)
+            let { token, openid } = qs
+            if (token) {
+              window.localStorage.setItem("token", token)
+            }
+            if (openid) {
+              window.localStorage.setItem("openid", openid)
+            }
           },
           async getUserInfo() {
-            const qs = Qs.parse(window.location.search.substr(1))
-            const res = await axios.get("/getUserInfo", {
-              params: {
-                openid: qs.openid
-              }
+            // const qs = Qs.parse(window.location.search.substr(1))
+            const res = await axios.post("/wx/openthird/userinfo", {
+              openid: this.openid
             })
             console.log("User", res.data)
           },
@@ -123,6 +124,11 @@
                 console.log("getNetworkType...", networkType)
               }
             })
+          }
+        },
+        computed: {
+          openid() {
+            return window.localStorage.getItem("openid")
           }
         },
         mounted: function() {

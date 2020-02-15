@@ -89,8 +89,12 @@ module.exports = appInfo => {
       "/api/v1/test/",
       "/public/",
       "/js",
+      "/index.html",
+      "/index2.html",
       "/wx/authorize",
       "/wx/callback",
+      "/wx/openthird/authorize",
+      "/wx/openthird/callback",
       "/auth/jwt/login",
       "/swagger-ui.html"
     ] // 哪些请求不需要认证

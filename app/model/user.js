@@ -22,6 +22,7 @@ module.exports = app => {
       },
       openid: {
         type: STRING(50),
+        unique: true,
         comment: "微信公众平台用户标识"
       },
       unionid: {
@@ -33,10 +34,34 @@ module.exports = app => {
         comment: "昵称"
       },
       sex: {
-        type: ENUM,
-        values: ["0", "1", "2"],
-        defaultValue: "0",
+        type: STRING,
+        defaultValue: 0,
         comment: "0/未设置 1男 2女"
+      },
+      country: {
+        type: STRING(20),
+        comment: "国籍"
+      },
+      province: {
+        type: STRING(20),
+        comment: "省份"
+      },
+      city: {
+        type: STRING(20),
+        comment: "城市"
+      },
+      headimgurl: {
+        type: STRING(255),
+        comment: "头像地址"
+      },
+
+      access_token: {
+        type: STRING(255),
+        comment: "令牌"
+      },
+      refresh_token: {
+        type: STRING(255),
+        comment: "刷新令牌"
       },
       state: {
         type: ENUM,

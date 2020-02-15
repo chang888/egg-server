@@ -23,7 +23,7 @@
         <input type="text" v-model="mobile" />
         <input type="text" v-model="mname" />
         <input type="text" v-model="mid" />
-        <a target="_blank" :href="url">点击授权连接{{url}}</a>
+        <a :href="url">点击授权连接{{url}}</a>
         <el-button @click="create">创建用户</el-button>
         <el-button @click="createMerchant">创建商户</el-button>
         <el-button @click="MerchantBind">商户绑定MP</el-button>
@@ -38,7 +38,9 @@
       <div>
         <el-button onclick="document.getElementById('log').innerHTML = ''">Clear Log</el-button>
       </div>
-      <h6 id="log"></h6>
+      <h6 id="log" v-for="item in log">
+        <div v-html="item"></div>
+      </h6>
     </div>
     <script>
       // axios.defaults.baseURL = 'http://localhost:3000'
@@ -58,7 +60,8 @@
         }
       )
       axios.interceptors.response.use(response => {
-        document.getElementById("log").append(`<div>${JSON.stringify(response.data)} </div>`)
+        // document.getElementById("log").append(`<div>${JSON.stringify(response.data)} </div><br>`)
+        app.log.push(`<div>${JSON.stringify(response.data)} </div>`)
         return response
       })
       var app = new Vue({
@@ -69,16 +72,17 @@
           mname: "",
           mobile: "150",
           mid: 3,
-          url: ""
+          url: "",
+          log: []
         },
         methods: {
           async createMerchant() {
             const res = await axios.post("/merchant/create", { mname: this.mname })
           },
           async MerchantBind() {
-            console.log(typeof this.mid)
+            console.log(typeof this.mid, window.location.href)
 
-            const res = await axios.post("/merchant/bindmp", { mid: Number(this.mid) })
+            const res = await axios.post("/merchant/bindmp", { mid: Number(this.mid), callbackUrl: window.location.href })
             if (res.data.code == 0) {
               this.url = res.data.data
             }
