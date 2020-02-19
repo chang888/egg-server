@@ -4,7 +4,7 @@ const { Service } = require("egg")
 
 class MerchantService extends Service {
   /**
-   * 创建用户
+   * 创建商户
    * @param {*} payload
    */
   async create(payload) {

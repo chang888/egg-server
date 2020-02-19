@@ -51,6 +51,7 @@ class MerchantController extends Controller {
     let res = await ctx.service.wechat.wechatOpenthird.componentLogin({ component_appid, redirect_uri })
     ctx.helper.success({ ctx, res, msg: "生成url成功" })
   }
+
   /**
    * @summary 商户绑定微信公众号回调
    * @description 商户绑定微信公众号回调
@@ -62,12 +63,10 @@ class MerchantController extends Controller {
 
   async bindMpCallback() {
     const { ctx, service, app } = this
-    console.log("=============bindMpCallback", ctx.query, ctx.params)
     const { callbackUrl } = ctx.params
     const { auth_code, mid } = ctx.query
     const { appid: component_appid } = app.config.wxConfig.openthird
     console.log("==============", "bindMpCallback")
-
     // 使用授权码获取授权方信息
     let res = await ctx.service.wechat.wechatOpenthird.apiQueryAuth(component_appid, auth_code)
     // 查找商户
@@ -76,13 +75,11 @@ class MerchantController extends Controller {
     if (!merchant) {
       ctx.throw(404, "商户不存在")
     }
-    console.log({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
+    // console.log({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
     await (`merchant${mid}authorizer_access_token`, res.authorizer_access_token, "EX", res.expires_in)
 
     await merchant.update({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
-    // await merchant.save()
     ctx.redirect(callbackUrl)
-    // ctx.helper.success({ ctx, res, msg: "生成url成功" })
   }
 }
 

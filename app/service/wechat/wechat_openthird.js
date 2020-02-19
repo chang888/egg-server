@@ -110,7 +110,6 @@ class WechatOpenthird extends Service {
 
     if (!pre_auth_code) {
       pre_auth_code = await this.setPreAuthCode(component_appid)
-      console.log("从数据库度", pre_auth_code)
     }
     if (!pre_auth_code) {
       ctx.throw(408, "pre_auth_code不存在")
@@ -149,8 +148,14 @@ class WechatOpenthird extends Service {
     const { ctx, app } = this
     const component_access_token = await this.getAccessToken(component_appid)
     const url = `https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=${component_access_token}`
-    const res = await ctx.curl(url, { method: "POST", dataType: "json", data: JSON.stringify({ component_appid, authorization_code }) })
-    return res.data.authorization_info
+    const rs = await ctx.curl(url, { method: "POST", dataType: "json", data: JSON.stringify({ component_appid, authorization_code }) })
+    // console.log(res, "apiQueryAuth")
+    if (!rs.data.authorization_info) {
+      ctx.throw(408, `errcode: ${rs.data.errcode} ,errmsg: ${rs.data.errmsg}`)
+    }
+    console.log("授权成功", rs.data.authorization_info)
+
+    return rs.data.authorization_info
   }
 }
 
