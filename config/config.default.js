@@ -96,7 +96,8 @@ module.exports = appInfo => {
       "/wx/openthird/authorize",
       "/wx/openthird/callback",
       "/auth/jwt/login",
-      "/swagger-ui.html"
+      "/swagger-ui.html",
+      "/log"
     ] // 哪些请求不需要认证
   }
   // add your user config here
