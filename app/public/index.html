@@ -32,6 +32,15 @@
       <cube-button @click="createMerchant">创建商户</cube-button>
     </div>
     <script>
+      // window.addEventListener("unload", logData, false)
+
+      // function logData() {
+      //   console.log("监听到unload")
+
+      //   // var client = new XMLHttpRequest()
+      //   navigator.sendBeacon("/log", "2222")
+      // }
+
       axios.defaults.withCredentials = true
       axios.interceptors.request.use(
         config => {
@@ -55,7 +64,6 @@
           redirect_uri: "http://changtest.free.idcfengye.com/index.html",
           url: "123"
         },
-
         methods: {
           async createMerchant() {
             const res = await axios.post("/merchant/create", { mname: "我是商户名" })
@@ -133,6 +141,21 @@
         },
         mounted: function() {
           this.getToken()
+          window.addEventListener("unload", logData, false)
+
+          function logData() {
+            var client = new XMLHttpRequest()
+            function getName() {
+              alert("看我")
+              return "zs999lll"
+            }
+            client.open("POST", "/log/" + getName(), false) // 第三个参数表明是同步的 xhr
+            client.setRequestHeader("Content-Type", "text/plain;charset=UTF-8")
+
+            client.send("随便写")
+            // alert(222)
+            // navigator.sendBeacon("/log", analyticsData)
+          }
         }
       })
     </script>
