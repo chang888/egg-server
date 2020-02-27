@@ -149,7 +149,7 @@ class WechatOpenthird extends Service {
     const component_access_token = await this.getAccessToken(component_appid)
     const url = `https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=${component_access_token}`
     const rs = await ctx.curl(url, { method: "POST", dataType: "json", data: JSON.stringify({ component_appid, authorization_code }) })
-    // console.log(res, "apiQueryAuth")
+    console.log(rs, "apiQueryAuth152")
     if (!rs.data.authorization_info) {
       ctx.throw(408, `errcode: ${rs.data.errcode} ,errmsg: ${rs.data.errmsg}`)
     }
