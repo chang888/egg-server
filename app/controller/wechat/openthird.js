@@ -7,7 +7,7 @@ const wechat = require("../../utils/openthird_wechat")
  */
 class OpenthirdController extends Controller {
   /**
-   * @summary 第三方授权事件接收URL
+   * @summary 第三方授权事件接收URL 针对第三方平台回调
    * @description 第三方授权事件接收URL
    * @router all /wx/third/authorize
    */
@@ -20,14 +20,21 @@ class OpenthirdController extends Controller {
       const type = message.InfoType
       // 授权成功
       if (type == "authorized") {
+        console.log("授权成功", message.AuthorizerAppid)
+        if (message.AuthorizerAppid == "wx570bc396a51b8ff8") {
+          console.log("全网发布授权appid")
+        }
         return "success"
       }
       // 更新授权
       if (type == "updateauthorized") {
+        console.log("更新授权", message.AuthorizerAppid)
         return "success"
       }
       // 取消授权
       if (type == "unauthorized") {
+        console.log("取消授权", message.AuthorizerAppid)
+
         return "success"
       }
       // 10分钟的票据推送
@@ -35,16 +42,14 @@ class OpenthirdController extends Controller {
         let openthird = await service.wechat.wechatOpenthird.findByAppid(message.AppId)
         await openthird.update({ component_verify_ticket: message.ComponentVerifyTicket })
         if (openthird.component_access_token === null) app.runSchedule("update_openthirds_accesstoken")
+        console.log("10分钟票据更新")
         return "success"
-      }
-      if (message.Content == "爱你") {
-        return "我也爱你"
       }
     })(ctx)
   }
 
   /**
-   * @summary 授权后消息与事件接收URL
+   * @summary 授权后消息与事件接收URL 商户消息回调
    * @description 授权后消息与事件接收URL
    * @router all /wx/third/news/callback/:appid
    */
@@ -64,17 +69,17 @@ class OpenthirdController extends Controller {
 
       const AUTO_TEST_TEXT_CONTENT = "TESTCOMPONENT_MSG_TYPE_TEXT"
       const AUTO_TEST_REPLY_TEXT = "TESTCOMPONENT_MSG_TYPE_TEXT_callback"
-      // 全网发布测试
       let { Content = "", FromUserName, ToUserName } = message
+      // 全网发布测试
 
       if ([AUTO_TEST_MP_NAME, AUTO_TEST_MINI_PROGRAM_NAME].includes(ToUserName)) {
         console.log("\n\n\n>>> 检测到全网发布测试 <<<\n\n\n")
         console.log("打印消息主体:")
         let strList = Content.split(":")
-        console.log(strList)
+        console.log(strList, "strList")
         // 测试公众号处理用户消息
         if (Content === AUTO_TEST_TEXT_CONTENT) {
-          console.log(`\n>>> 测试用例：被动回复消息；状态：已回复；回复内容：${AUTO_TEST_REPLY_TEXT} <<<\n`)
+          console.log(`\n>>> 测试用例：被动回复消息；状态：回复内容：${AUTO_TEST_REPLY_TEXT} <<<\n`)
           return AUTO_TEST_REPLY_TEXT
         }
         // 测试公众号使用客服消息接口处理用户消息
@@ -84,16 +89,19 @@ class OpenthirdController extends Controller {
           let auth_code = strList[1]
           const { appid: component_appid } = app.config.wxConfig.openthird
           let res = await service.wechat.wechatOpenthird.apiQueryAuth(component_appid, auth_code)
-          console.log(res, "92")
+          console.log(res, "92apiQueryAuth")
+          // let authorizer_access_token = await service.merchant.getAccessToken("wxd96c29c25fcd4c28")
+          // console.log(authorizer_access_token, "authorizer_access_token")
 
           // let obj = { appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token }
           // let { component_access_token } = componentMap[`${componentAppId}`]
           // let {
           //   authorization_info: { authorizer_access_token }
-          // } = await Authorizer.getAccessToken(componentAppId, component_access_token, strList[1])
+          // } = await Authorizer.getAccessToken(componentAppId, component_access_token, auth_code)
           let content = `${auth_code}_from_api`
 
           let ret = await service.wechat.wechatApi.send(res.authorizer_access_token, FromUserName, "text", { content })
+          // let ret = await service.wechat.wechatApi.send(authorizer_access_token, FromUserName, "text", { content })
           // let ret = await Authorizer.send(authorizer_access_token, FromUserName, "text", { content })
           console.log(`\n>>> 测试用例：主动发送客服消息；状态：已发送；响应结果：${JSON.stringify(ret)}；发送内容：${content} <<<\n`)
         }
