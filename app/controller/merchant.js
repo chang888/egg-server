@@ -71,12 +71,11 @@ class MerchantController extends Controller {
     let res = await ctx.service.wechat.wechatOpenthird.apiQueryAuth(component_appid, auth_code)
     // 查找商户
     let merchant = await ctx.service.merchant.findByMid(mid)
-    console.log(merchant)
     if (!merchant) {
       ctx.throw(404, "商户不存在")
     }
     // console.log({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
-    await (`merchant${mid}authorizer_access_token`, res.authorizer_access_token, "EX", res.expires_in)
+    await app.redis.set(`merchant${mid}authorizer_access_token`, res.authorizer_access_token, "EX", res.expires_in)
 
     await merchant.update({ appid: res.authorizer_appid, access_token: res.authorizer_access_token, refresh_token: res.authorizer_refresh_token })
     ctx.redirect(callbackUrl)
