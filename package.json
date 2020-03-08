@@ -20,7 +20,9 @@
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^5.2.1",
     "egg-swagger-doc-feat": "^2.2.13",
+    "egg-userrole": "^2.1.0",
     "egg-validate": "^2.0.2",
+    "github-webhook-handler": "^0.7.1",
     "image-downloader": "^3.4.2",
     "mysql2": "^2.1.0",
     "stream-wormhole": "^1.1.0"

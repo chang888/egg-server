@@ -20,7 +20,7 @@ class WechatApi extends Service {
       [type]: content
     }
     // url += "?" + querystring.stringify(query)
-    console.log(url, body, "send")
+    console.log(url, body, JSON.stringify(body), "send")
 
     let res = await app.curl(url, {
       method: "POST",
