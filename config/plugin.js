@@ -11,6 +11,10 @@ module.exports = {
     enable: true,
     package: "egg-swagger-doc-feat"
   },
+  cors : {
+    enable: true,
+    package: 'egg-cors',
+  },
 
   validate: {
     enable: true,

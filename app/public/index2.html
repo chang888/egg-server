@@ -20,20 +20,33 @@
       <div><a href="/swagger-ui.html">SwaggerUI</a></div>
       <div><a href="https://www.easy-mock.com/project/5ce3669a733e8967c7b2e902">EasyMock地址</a></div>
       <div>
-        <input type="text" v-model="mobile" />
-        <input type="text" v-model="mname" />
-        <input type="text" v-model="mid" />
+        <label for="">手机号</label><input type="text" v-model="mobile" />
+        <label for="">商户名字</label><input type="text" v-model="mname" />
+        <label for="">商户ID</label> <input type="text" v-model="mid" />
         <a :href="url">点击授权连接{{url}}</a>
         <el-button @click="create">创建用户</el-button>
         <el-button @click="createMerchant">创建商户</el-button>
         <el-button @click="MerchantBind">商户绑定MP</el-button>
         <el-button @click="list">用户列表</el-button>
         <el-button @click="del">删除用户</el-button>
+        <el-button @click="test">测试</el-button>
       </div>
       <div>
         <el-button @click="login">登入</el-button>
         <el-button @click="logout">退出登录</el-button>
         <el-button @click="getUserList">用户列表</el-button>
+      </div>
+      <br><br>
+      <div>
+        <el-select v-model="mid" placeholder="请选择">
+          <el-option
+            v-for="item in merchantList"
+            :key="item.mid"
+            :label="item.mname"
+            :value="item.mid">
+          </el-option>
+        </el-select>
+        <el-button @click="login">查询</el-button>
       </div>
       <div>
         <el-button onclick="document.getElementById('log').innerHTML = ''">Clear Log</el-button>
@@ -62,7 +75,7 @@
       axios.interceptors.response.use(response => {
         // document.getElementById("log").append(`<div>${JSON.stringify(response.data)} </div><br>`)
         app.log.push(`<div>${JSON.stringify(response.data)} </div>`)
-        return response
+        return response.data
       })
       var app = new Vue({
         el: "#app",
@@ -71,20 +84,27 @@
           token: {},
           mname: "",
           mobile: "150",
-          mid: 3,
+          mid: 1,
           url: "",
-          log: []
+          log: [],
+          merchantList: [],
         },
         methods: {
           async createMerchant() {
             const res = await axios.post("/merchant/create", { mname: this.mname })
           },
+          async getMerchantList() {
+            const res = await axios.post("/merchant/findAll")
+            if (res.code == 0) {
+              this.merchantList = res.data.list
+            }
+          },
           async MerchantBind() {
             console.log(typeof this.mid, window.location.href)
 
             const res = await axios.post("/merchant/bindmp", { mid: Number(this.mid), callbackUrl: window.location.href })
-            if (res.data.code == 0) {
-              this.url = res.data.data
+            if (res.code == 0) {
+              this.url = res.data
             }
           },
           async create() {
@@ -96,7 +116,11 @@
           },
           async list() {
             const res = await axios.get("/api/user/list")
-            this.list = res.data.data.list
+            this.list = res.data.list
+          },
+          async test() {
+            const res = await axios.get("/api/test")
+            this.list = res.data.list
           },
           async del() {
             console.log("list", this.list)
@@ -105,11 +129,11 @@
             })
           },
           async login() {
-            const res = await axios.post("/auth/jwt/login", {
+            const res = await axios.post("/admin/auth/jwt/login", {
               mobile: this.mobile,
               password: "111111"
             })
-            localStorage.setItem("token", res.data.data.token)
+            localStorage.setItem("token", res.data.token)
           },
           async logout() {
             const res = await axios.post("/auth/jwt/logout")
@@ -119,7 +143,9 @@
             await axios.get("/api/user")
           }
         },
-        mounted: function() {}
+        mounted: function() {
+          this.getMerchantList()
+        }
       })
     </script>
   </body>

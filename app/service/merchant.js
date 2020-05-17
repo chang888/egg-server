@@ -22,6 +22,7 @@ class MerchantService extends Service {
     merchant.update({})
     // merchant.
   }
+
   /**
    * 查找by mname
    * @param {*} mname 商户名
@@ -30,6 +31,16 @@ class MerchantService extends Service {
     const { ctx, service } = this
     return await ctx.model.Merchant.findOne({ where: { mname } })
   }
+
+  /**
+   * 查找所有商户list
+   * @param {*} payload 查询参数
+   */
+  async findAll(payload) {
+    const { ctx, service } = this
+    return await ctx.model.Merchant.findAll(payload)
+  }
+
   /**
    * 查找by appid
    * @param {*} appid 商户appid

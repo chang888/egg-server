@@ -10,6 +10,8 @@ class UserAccessService extends Service {
     if (!user) {
       ctx.throw(404, "该手机号尚未注册")
     }
+    console.log(data, "token")
+    
     return { token: await service.actionToken.apply(user.uid, user.mid) }
   }
 

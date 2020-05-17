@@ -1,7 +1,15 @@
 /* eslint valid-jsdoc: "off" */
 
 "use strict"
-
+function getMatch (ctx) {
+  console.log("访问api:")
+  console.log(ctx.path)
+  if (ctx.path.indexOf('login') !=-1 || ctx.path.indexOf('/wx/') !=-1 || ctx.path.indexOf('/merchant/bind') !=-1) {
+    return false
+  } else {
+    return true
+  }
+}
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
@@ -35,6 +43,10 @@ module.exports = appInfo => {
     // enableValidate: true,
     routerMap: true,
     enable: true
+  }
+  config.cors = {
+    credentials: true,
+    origin: ctx => ctx.get('origin'),
   }
   config.i18n = {
     // 默认语言，默认 "en_US"
@@ -80,25 +92,27 @@ module.exports = appInfo => {
   config.jwt = {
     secret: "Great4-M",
     enable: true, // default is false
-    // match: [/^\/api/] // optional
-    ignore: [
-      "/test",
-      "/wx/third",
-      "/merchant/bindmpcallback",
-      "/wechat/wechatInterface/wechat",
-      "/api/v1/test/",
-      "/public/",
-      "/js",
-      "/index.html",
-      "/index2.html",
-      "/wx/authorize",
-      "/wx/callback",
-      "/wx/openthird/authorize",
-      "/wx/openthird/callback",
-      "/auth/jwt/login",
-      "/swagger-ui.html",
-      "/log"
-    ] // 哪些请求不需要认证
+    // match: [/^\/api/,/^\/admin/],
+    match: [getMatch,]
+    // ignore: [
+    //   // "/test",
+    //   "/wx/third",
+    //   "/merchant/bindmpcallback",
+    //   "/wechat/wechatInterface/wechat",
+    //   "/api/v1/test/",
+    //   "/public/",
+    //   "/js",
+    //   "/index.html",
+    //   "/index2.html",
+    //   "/wx/authorize",
+    //   "/wx/callback",
+    //   "/wx/openthird/authorize",
+    //   "/wx/openthird/callback",
+    //   "/auth/jwt/login",
+    //   "/swagger-ui.html",
+    //   // "/log"
+    // ] 
+    // 哪些请求不需要认证
   }
   // add your user config here
   config.wxConfig = {

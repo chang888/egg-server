@@ -28,6 +28,25 @@ class MerchantController extends Controller {
       ctx.helper.success({ ctx, msg: "创建成功" })
     }
   }
+
+   /**
+   * @summary 查询商户列表
+   * @description 查询商户列表
+   * @router post /merchant/findAll
+   * @request header string *Authorization
+   * @request body createMerchantRequest *body
+   * @response 200 baseResponse 查询成功
+   */
+  async findAll() {
+    const { ctx, service } = this
+    // ctx.throw({ code: 800, message: "任意code" })
+    let list = await ctx.service.merchant.findAll({ attributes: ["mid", "mname", "appid"]})
+    if (list) {
+      ctx.helper.success({ ctx, res: {list} })
+    }
+  }
+
+
   /**
    * @summary 商户绑定微信公众号
    * @description 商户绑定微信公众号

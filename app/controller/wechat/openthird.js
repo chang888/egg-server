@@ -13,9 +13,9 @@ class OpenthirdController extends Controller {
    */
   async authorizeCallback() {
     const { ctx, app, service } = this
-    let { openthird } = app.config.wxConfig
-    await wechat(openthird).middleware(async (message, ctx) => {
-      console.log(message, "收到的消息2222 收到的消息")
+    let { openthird : openthirdConfig } = app.config.wxConfig
+    await wechat(openthirdConfig).middleware(async (message, ctx) => {
+      console.log(message, "收到的消息")
       // 授权变更通知推送
       const type = message.InfoType
       // 授权成功

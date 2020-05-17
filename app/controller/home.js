@@ -27,16 +27,17 @@ class HomeController extends Controller {
   /**
    * @summary 测试接口
    * @description 测试接口
-   * @router get /test
+   * @router get /api/test
    * @response 200 baseResponse ok
    */
   async test() {
     const { ctx, service } = this
-    let res = await service.wechat.wechatOpenthird.setTicket("wx63b29481682ccfd8", "ticket@@@2El3U85lh1RRhFsFq5KDZ7m3izcZaZM4L4zjLIzdyz-K7e54fcwuFf3BuWhg9mfnrlMheQCQSLRs7mpTJjW85A")
-    console.log(res, "存openthird")
-    ctx.helper.success({
+    console.log(ctx.state.user.data)
+    // let res = await service.wechat.wechatOpenthird.setTicket("wx63b29481682ccfd8", "ticket@@@2El3U85lh1RRhFsFq5KDZ7m3izcZaZM4L4zjLIzdyz-K7e54fcwuFf3BuWhg9mfnrlMheQCQSLRs7mpTJjW85A")
+    // console.log(res, "存openthird")
+    ctx.helper.fail({
       ctx,
-      res,
+      code: 404,
       msg: "更新ticket成功"
     })
   }

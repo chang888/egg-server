@@ -13,6 +13,7 @@
     "co-wechat-oauth": "^2.0.1",
     "egg": "^2.15.1",
     "egg-bcrypt": "^1.1.0",
+    "egg-cors": "^2.2.3",
     "egg-jwt": "^3.1.6",
     "egg-logrotator": "^3.1.0",
     "egg-mongoose": "^3.2.0",
@@ -42,6 +43,7 @@
   "scripts": {
     "start": "egg-scripts start --port=7001 --title=egg-server-cc",
     "stop": "egg-scripts stop ",
+    "local": "npm run dev && npm run sunny",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
@@ -50,7 +52,7 @@
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
-    "sunny": "./bin/sunny clientid 133528237527",
+    "sunny": "./bin/sunny clientid 223946237527 &",
     "ngrok": "./bin/ngrok http 7001"
   },
   "ci": {

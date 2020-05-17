@@ -9,6 +9,15 @@ exports.success = ({ ctx, res = null, msg = "处理成功" }) => {
   }
   ctx.status = 200
 }
+// 处理失败响应 非全局异常
+exports.fail = ({ ctx, code = "-1", msg = "服务器繁忙" }) => {
+  ctx.body = {
+    code,
+    msg
+  }
+  ctx.status = 200
+}
 
 // 格式化时间
 exports.formatTime = time => moment(time).format("YYYY-MM-DD HH:mm:ss")
+
