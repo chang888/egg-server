@@ -102,12 +102,13 @@ class MerchantService extends Service {
    * @param {*} authorizer_appid 授权方appid
    * @param {*} authorizer_refresh_token 授权方刷新令牌
    */
-  async getAccessToken(authorizer_appid) {
+  async getAccessToken(mid) {
     const { ctx, app } = this
+    let merchant = await this.findByMid(mid)
     // 从redis读取 没有就设置
-    let authorizer_access_token = await app.redis.get(`merchantappid_${authorizer_appid}_authorizer_access_token`)
+    let authorizer_access_token = await app.redis.get(`merchantappid_${merchant.appid}_authorizer_access_token`)
     if (!authorizer_access_token) {
-      authorizer_access_token = await this.setAccessToken(authorizer_appid)
+      authorizer_access_token = await this.setAccessToken(merchant.appid)
     }
     return authorizer_access_token
   }

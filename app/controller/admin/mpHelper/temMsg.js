@@ -27,6 +27,9 @@ class TemMsgController extends Controller {
 
     // 调用 Service 进行业务处理
     const res = await service.admin.mpHelper.temMsg.getList(mid)
+    // 删除订阅模板消息
+    let index = res.template_list.findIndex(item => item.title == "订阅模板消息")
+    res.template_list.splice(index, 1)
     // 设置响应内容和响应状态码
     ctx.helper.success({ ctx, res: {list: res.template_list}, msg: "查询成功" })
   }
@@ -53,6 +56,31 @@ class TemMsgController extends Controller {
     console.log(res, "sendMsgres")
     // 设置响应内容和响应状态码
     ctx.helper.success({ ctx, msg: res.errmsg })
+  }
+
+
+  /**
+   * @summary 保存模板消息
+   * @description 保存模板消息
+   * @router post /admin/mp/temMsg/saveOrEditMsg
+   * @request header string *Authorization
+   * @request body templateSendMsgRequest *body
+   * @response 0 baseResponse 保存成功
+   */
+  async saveOrEditMsg() {
+    const { ctx, service } = this
+    const { mid } = ctx.state.user.data
+    console.log(ctx.request.body, "传入参数")
+    // 校验参数
+    ctx.validate(ctx.rule.templateSaveOrEditMsgRequest)
+    // 组装参数
+    const payload = ctx.request.body || {}
+    // console.log(payload, "payload333")
+    // // 调用 Service 进行业务处理
+    const res = await service.admin.mpHelper.temMsg.saveOrEditMsg(payload)
+    // console.log(res, "sendMsgres")
+    // 设置响应内容和响应状态码
+    ctx.helper.success({ ctx, msg: "请求成功"})
   }
 
 }

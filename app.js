@@ -58,7 +58,6 @@ class AppBootHook {
     const run = async ctx => {
       console.log("========Init Data=========")
       const { STRING, DATE, BIGINT, ENUM } = this.app.Sequelize
-
       // console.log("销毁user表")
       // await ctx.model.queryInterface.dropTable("cc_users")
       // console.log("销毁user表成功")
@@ -223,42 +222,73 @@ class AppBootHook {
       //   console.log("新建模拟数据Openthirderr", err)
       // }
       console.log("销毁merchant表")
-      // await ctx.model.queryInterface.dropTable("cc_merchants")
+      await ctx.model.queryInterface.dropTable("cc_temmsgs")
       console.log("销毁merchant表成功")
       console.log("创建merchant表")
       try {
         await ctx.model.queryInterface.createTable(
-          "cc_merchants",
+          "cc_temmsgs",
           {
-            mid: {
+            id: {
               type: BIGINT(20),
               primaryKey: true,
               autoIncrement: true,
-              comment: "商户id"
-            },
-            mname: {
-              type: STRING(100),
-              allowNull: false,
-              comment: "商户名称"
-            },
-            appid: {
-              type: STRING(50),
               unique: true,
-              comment: ""
+              comment: "消息id"
             },
-            access_token: {
-              type: STRING(255),
-              comment: ""
+            mid: {
+              type: BIGINT(20),
+              comment: "商户id",
             },
-            refresh_token: {
-              type: STRING(255),
-              comment: ""
+            title: {
+              type: STRING(100),
+              comment: "主题",
+              allowNull: false
+            },
+            send_time: {
+              type: STRING(100),
+              comment: "推送时间",
+              allowNull: false
+            },
+            send_num: {
+              type: STRING(100),
+              comment: "推送人数",
+              defaultValue: 0,
+              allowNull: false
+            },
+            send_object: {
+              type: STRING(100),
+              comment: "群发对象",
+              defaultValue: 0,
+              allowNull: false
+            },
+            send_data: {
+              type: STRING(100),
+              comment: "推送数据",
+              defaultValue: 0,
+              allowNull: false
+            },
+            template_id: {
+              type: STRING(100),
+              comment: "模板id",
+              defaultValue: 0,
+              allowNull: false
+            },
+            url: {
+              type: STRING(100),
+              comment: "模板跳转链接",
+              allowNull: true
+            },
+            miniprogram: {
+              type: STRING(100),
+              comment: "跳小程序所需数据，不需跳小程序可不用传该数据",
+              allowNull: true
             },
             state: {
               type: ENUM,
-              values: ["0", "1"],
+              values: ["0", "1", "2", "3"],
               defaultValue: "1",
-              comment: "0/无效 1有效"
+              comment: "0/没发送 1/发送中 2/已发送 3/已暂停"
             },
             created_at: DATE,
             updated_at: DATE,
@@ -281,17 +311,21 @@ class AppBootHook {
             }
           }
         )
-        console.log("建表cc_merchant成功")
+      //   console.log("建表cc_merchant成功")
       } catch (err) {
         console.log("创建cc_merchant表error", err)
         return
       }
       console.log("新建模拟数据cc_merchant")
-      let res = await ctx.model.Merchant.create({
-        mname: "常常遇见在家测试",
-        appid: "wxd96c29c25fcd4c28"
+      let res = await ctx.model.Temmsg.create({
+        mid: 1,
+        title: "测试发送",
+        send_time: "发送时间",
+        send_object: "all",
+        send_data: JSON.stringify({}),
+        template_id: "sddsdsds"
       })
-      console.log("新建模拟数据成功cc_merchant", res)
+      // console.log("新建模拟数据成功cc_merchant", res)
     }
     // run(ctx)
   }
