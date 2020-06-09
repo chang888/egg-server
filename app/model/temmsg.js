@@ -1,3 +1,4 @@
+const moment = require("moment")
 module.exports = app => {
   const { STRING, DATE, BIGINT, ENUM } = app.Sequelize
 
@@ -59,7 +60,7 @@ module.exports = app => {
         comment: "跳小程序所需数据，不需跳小程序可不用传该数据",
         allowNull: true
       },
-      state: {
+      status: {
         type: ENUM,
         values: ["0", "1", "2", "3"],
         defaultValue: "0",
@@ -70,18 +71,16 @@ module.exports = app => {
       deleted_at: DATE
     },
     {
-      created_at: "create_time",
-      updated_at: "update_time",
-      deleted_at: "delete_time",
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+      deletedAt: 'deleted_at',
       paranoid: true,
       getterMethods: {
-        createTime() {
-          // @ts-ignore
-          return new Date(this.getDataValue("create_time")).getTime()
+        created_at() {
+          return moment(this.getDataValue("created_at")).format('YYYY-MM-DD HH:mm:ss');
         },
-        updateTime() {
-          // @ts-ignore
-          return new Date(this.getDataValue("update_time")).getTime()
+        updated_at() {
+          return moment(this.getDataValue("updated_at")).format('YYYY-MM-DD HH:mm:ss');
         }
       }
     }

@@ -44,6 +44,7 @@ class AppBootHook {
     // Worker is ready, can do some things
     // don't need to block the app boot.
     const ctx = await this.app.createAnonymousContext()
+    
     // let res = await ctx.service.user.setUserAccessToken("ob1dPv0DSdECDT-0kfI4LLN6lFYI")
     // let res = await ctx.service.merchant.getAccessToken("wxd96c29c25fcd4c28")
     // console.log(res, "merchanttoken")
@@ -295,18 +296,18 @@ class AppBootHook {
             deleted_at: DATE
           },
           {
-            created_at: "create_time",
-            updated_at: "update_time",
-            deleted_at: "delete_time",
+            createdAt: 'created_at',
+            updatedAt: 'updated_at',
+            deletedAt: 'deleted_at',
             paranoid: true,
             getterMethods: {
-              createTime() {
+              created_at() {
                 // @ts-ignore
-                return new Date(this.getDataValue("create_time")).getTime()
+                return moment(this.getDataValue("created_at")).format('YYYY-MM-DD HH:mm:ss');
               },
-              updateTime() {
+              updated_at() {
                 // @ts-ignore
-                return new Date(this.getDataValue("update_time")).getTime()
+                return moment(this.getDataValue("updated_at")).format('YYYY-MM-DD HH:mm:ss');
               }
             }
           }

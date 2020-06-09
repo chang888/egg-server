@@ -78,7 +78,8 @@ module.exports = appInfo => {
     username: "chang",
     password: "Chang789",
     logging: true,
-    timezone: "+08:00"
+    timezone: "+08:00",
+    timestamps: false
   }
   // redis
   config.redis = {

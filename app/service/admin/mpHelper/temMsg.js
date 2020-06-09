@@ -9,15 +9,10 @@ class TemMsgService extends Service {
    * @param {string} mid 商户id
    */
 
-  async getList(mid) {
+  async getTemplateList(mid) {
     const { ctx, service, app } = this
     let access_token = await service.merchant.getAccessToken(mid)
   
-    // if (!merchant.access_token) {
-    //   console.log(merchant.appid, "merchant.appid")
-      
-    //   await ctx.service.merchant.setAccessToken(merchant.appid)
-    // }
     let url = `https://api.weixin.qq.com/cgi-bin/template/get_all_private_template?access_token=${access_token}`
     let res = await app.curl(url, {
       method: "get",
@@ -70,29 +65,38 @@ class TemMsgService extends Service {
   }
 
   /**
-    * 保存模板消息
-    * @param {string} authorizerAccessToken 授权方access token
-    * @param {string} openId 保存用户openId
-    * @param {String} appId
+    * 保存/编辑模板消息
+    * @param {Object} id
+    * @param {String} title
+    * @param {Object} send_time
+    * @param {Object} send_object
+    * @param {string} send_data 发送的数据
     * @param {String} template_id
     * @param {String} url
-    * @param {Object} data
     * @param {Object} miniprogram
   */
 
   async saveOrEditMsg(payload) {
     const { ctx, service, app } = this
     const { mid } = ctx.state.user.data
-    let { send_data, title, template_id, send_object, send_time ,url, miniprogram  } = payload
+    let { send_data, title, template_id, send_object, send_time ,url, miniprogram, id  } = payload
     send_data = JSON.stringify(send_data)
-    Object.assign(payload)
-    console.log(url)
-    
-    let res = await ctx.model.Temmsg.create({send_data, title, template_id, send_object, send_time, mid, url, miniprogram})
-    console.log(res, "Temmsg")
-    
-    return res
+    await ctx.model.Temmsg.create({send_data, title, template_id, send_object, send_time, mid, url, miniprogram})
   }
+
+  /**
+    * 删除模板消息
+    * @param {string} id
+  */
+
+ async deleteMsg(payload) {
+  const { ctx, service, app } = this
+  const { mid } = ctx.state.user.data
+  const { id  } = payload
+  let delres = await ctx.model.Temmsg.destroy({where: {id, mid}})
+  console.log(delres, "delres")
+  
+}
 
 }
 
