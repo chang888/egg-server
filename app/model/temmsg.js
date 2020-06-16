@@ -1,6 +1,6 @@
 const moment = require("moment")
 module.exports = app => {
-  const { STRING, DATE, BIGINT, ENUM } = app.Sequelize
+  const { STRING, DATE, BIGINT, ENUM ,TEXT} = app.Sequelize
 
   const Temmsg = app.model.define(
     "cc_temmsgs",
@@ -39,7 +39,7 @@ module.exports = app => {
         allowNull: false
       },
       send_data: {
-        type: STRING(100),
+        type: TEXT,
         comment: "推送数据",
         defaultValue: 0,
         allowNull: false
@@ -56,7 +56,7 @@ module.exports = app => {
         allowNull: true
       },
       miniprogram: {
-        type: STRING(100),
+        type: STRING,
         comment: "跳小程序所需数据，不需跳小程序可不用传该数据",
         allowNull: true
       },

@@ -44,7 +44,9 @@ class AppBootHook {
     // Worker is ready, can do some things
     // don't need to block the app boot.
     const ctx = await this.app.createAnonymousContext()
-    
+    // console.log(await ctx.service.wechat.WechatApi)
+    // let res = await ctx.service.wechat.wechatApi.qrcodeCreate({mid:1, expire_seconds: 3000})
+    // console.log(res, "=================")
     // let res = await ctx.service.user.setUserAccessToken("ob1dPv0DSdECDT-0kfI4LLN6lFYI")
     // let res = await ctx.service.merchant.getAccessToken("wxd96c29c25fcd4c28")
     // console.log(res, "merchanttoken")

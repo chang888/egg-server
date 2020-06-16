@@ -81,6 +81,12 @@ class TemMsgService extends Service {
     const { mid } = ctx.state.user.data
     let { send_data, title, template_id, send_object, send_time ,url, miniprogram, id  } = payload
     send_data = JSON.stringify(send_data)
+
+    // 编辑的时候
+    if (id) {
+
+    }
+    // 新建
     await ctx.model.Temmsg.create({send_data, title, template_id, send_object, send_time, mid, url, miniprogram})
   }
 
@@ -89,14 +95,35 @@ class TemMsgService extends Service {
     * @param {string} id
   */
 
- async deleteMsg(payload) {
-  const { ctx, service, app } = this
-  const { mid } = ctx.state.user.data
-  const { id  } = payload
-  let delres = await ctx.model.Temmsg.destroy({where: {id, mid}})
-  console.log(delres, "delres")
-  
-}
+  async deleteMsg(id) {
+    const { ctx, service, app } = this
+    const { mid } = ctx.state.user.data
+    // const { id  } = payload
+    let delres = await ctx.model.Temmsg.destroy({where: {id, mid}})
+    console.log(delres, "delres")
+  }
+
+
+    /**
+    * 查询单个模板消息
+    * @param {string} id
+  */
+
+  async getOneMsg(id) {
+    const { ctx, service, app } = this
+    const { mid } = ctx.state.user.data
+    // const { id  } = payload
+    let msg = await ctx.model.Temmsg.findOne({where: {id}})
+    if (!msg) {
+      ctx.throw(404, "未找到该模板消息")
+    }
+    if (msg.mid != mid) {
+      ctx.throw(410, "商户不匹配")
+    }
+    return msg
+    // console.log(msg, "delres")
+  }
+
 
 }
 

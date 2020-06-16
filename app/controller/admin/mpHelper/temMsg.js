@@ -82,6 +82,27 @@ class TemMsgController extends Controller {
     // 设置响应内容和响应状态码
     ctx.helper.success({ ctx, msg: "保存成功"})
   }
+    
+  /**
+   * @summary 获取模板消息byId
+   * @description 获取模板消息byId
+   * @router post /admin/mp/temMsg/getOne
+   * @request header string *Authorization
+   * @request body templateSendMsgRequest *body
+   * @response 0 baseResponse 查询成功
+   */
+  async getOne() {
+    const { ctx, service } = this
+    console.log(ctx.request.body, "传入参数")
+    // 校验参数
+    ctx.validate(ctx.rule.templateDeleteMsgRequest)
+    // 组装参数
+    const payload = ctx.request.body || {}
+    const { id } = payload
+    let res = await service.admin.mpHelper.temMsg.getOneMsg(id)
+    ctx.helper.success({ ctx,res, msg: "查询成功"});
+  }
+
   /**
    * @summary 删除模板消息
    * @description 删除模板消息
@@ -97,12 +118,10 @@ class TemMsgController extends Controller {
     ctx.validate(ctx.rule.templateDeleteMsgRequest)
     // 组装参数
     const payload = ctx.request.body || {}
-    // console.log(payload, "payload333")
-    // // 调用 Service 进行业务处理
-    await service.admin.mpHelper.temMsg.deleteMsg(payload)
-    // console.log(res, "sendMsgres")
-    // 设置响应内容和响应状态码
-    ctx.helper.success({ ctx, msg: "删除成功"})
+    const { id } = payload
+
+    await service.admin.mpHelper.temMsg.deleteMsg(id)
+    ctx.helper.success({ ctx, msg: "删除成功"});
   }
 
   /**
@@ -118,33 +137,6 @@ class TemMsgController extends Controller {
     const { mid } = ctx.state.user.data
     let res = await ctx.helper.pager({ctx, modelName: "Temmsg",params: {where: {mid}}})
     ctx.helper.success({ ctx, res, msg: "查询成功"})
-
-    // 校验参数
-    // ctx.validate(ctx.rule.templateSaveOrEditMsgRequest)
-    // 组装参数
-    // const payload = ctx.request.body || {}
-    // const pageSizes = [30,50,100,200]
-    // let {currentPage = 1, pageSize = 30} = payload.pages || {}
-    // console.log(currentPage, pageSize, "pageSize")
-
-    // let rs = await ctx.model.Temmsg.findAndCountAll(
-    //   {
-    //     where: {mid},
-    //     limit: pageSize,
-    //     offset: pageSize * (currentPage - 1),
-    //     order: [
-    //       ['id', 'DESC'],
-    //     ],
-        // distinct: true,
-        // required: false
-      // })
-    // console.log(rs, "rsrs.rows")
-    
-    // console.log(payload, "payload333")
-    // // 调用 Service 进行业务处理
-    // const res = await service.admin.mpHelper.temMsg.saveOrEditMsg(payload)
-    // console.log(res, "sendMsgres")
-    // 设置响应内容和响应状态码
   }
 
 }
