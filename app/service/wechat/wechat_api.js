@@ -42,16 +42,19 @@ class WechatApi extends Service {
    * @param {string} scene_str 场景值ID（字符串形式的ID），字符串类型，长度限制为1到64
    */
 
-  async qrcodeCreate({mid, expire_seconds, action_name = "QR_SCENE", scene_id = 123, scene_str}) {
+  async qrcodeCreate({mid, expire_seconds, action_name = "QR_SCENE", scene_id, scene_str}) {
     const { ctx, service, app, } = this
     let accessToken = await service.merchant.getAccessToken(mid)
-    
+    console.log(scene_str, "scene_str")
+    let scene = scene_str ? {scene_str} :{scene_id}
     let url = `https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=${accessToken}`
     let body = {
       expire_seconds,
       action_name,
-      action_info: {scene: {scene_id, scene_str}},
+      action_info: {scene},
     }
+    console.log(body, "body")
+    
     // url += "?" + querystring.stringify(query)
     // console.log(url, body, JSON.stringify(body), "send")
 
@@ -60,9 +63,6 @@ class WechatApi extends Service {
       dataType: "json",
       data: JSON.stringify(body)
     })
-    console.log(res.data)
-    
-
     return res.data
   }
 }

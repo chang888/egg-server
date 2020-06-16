@@ -59,13 +59,22 @@ class OpenthirdController extends Controller {
     let { openthird } = app.config.wxConfig
     await wechat(openthird).middleware(async (message, ctx) => {
       console.log(message, "收到的消息newsCallback", appid)
+      
       if (message.MsgType == "event" && message.Event == "SCAN") {
-        // 场景值id
-        const id = message.EventKey
-        const merchant = await service.merchant.findByAppid(appid)
-        const openid = message.FromUserName
-        service.admin.temMsg.send()
-        // return "扫描成功"
+        let arr = message.EventKey.split("-")
+        if (arr[0] == "temMsg") {
+          // 场景值id
+          const id = arr[1]
+          const merchant = await service.merchant.findByAppid(appid)
+          const temMsg = await service.admin.mpHelper.temMsg.getOneMsg(id)
+          const openid = message.FromUserName
+          const { template_id, url, send_data, miniprogram } = temMsg
+          console.log({mid: merchant.mid,openid, template_id, url, send_data, miniprogram  }, "=======")
+
+          await service.admin.mpHelper.temMsg.sendMsg({mid: merchant.mid,openid, template_id, url, send_data, miniprogram})
+          return `${temMsg.title}发送成功`
+        }
+
       }
       // 全网发布自动化测试的账号
       const AUTO_TEST_MP_APPID = "wx570bc396a51b8ff8" // 测试公众号APPID

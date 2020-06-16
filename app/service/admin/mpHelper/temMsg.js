@@ -27,7 +27,7 @@ class TemMsgService extends Service {
   }
   /**
     * 发送模板消息
-    * @param {string} authorizerAccessToken 授权方access token
+    * @param {string} mid 授权方access token
     * @param {string} openId 微信用户openId
     * @param {String} appId
     * @param {String} template_id
@@ -36,18 +36,19 @@ class TemMsgService extends Service {
     * @param {Object} miniprogram
   */
 
-  async sendMsg(payload) {
+  async sendMsg({mid, openid, template_id, url, send_data, miniprogram } ) {
     const { ctx, service, app } = this
-    const { mid } = ctx.state.user.data
-    const { appId, openid, template_id, url, data, miniprogram } = payload
+    let data = JSON.parse(send_data)
+    // const { appId, openid, template_id, url, data, miniprogram } = payload
     let merchant = await service.merchant.findByMid(mid)
     let obj = {
       touser: openid,
       template_id,
       url,
+      miniprogram,
       data
-  }
-    miniprogram && (obj.miniprogram = miniprogram)
+    }
+    // miniprogram && (obj.miniprogram = miniprogram)
     // let res = await axios.post(`${this.prefix}message/template/send?access_token=${authorizerAccessToken}`, obj)
     // return res.data
     let apiUrl = `https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=${merchant.access_token}`
@@ -78,16 +79,22 @@ class TemMsgService extends Service {
 
   async saveOrEditMsg(payload) {
     const { ctx, service, app } = this
-    const { mid } = ctx.state.user.data
-    let { send_data, title, template_id, send_object, send_time ,url, miniprogram, id  } = payload
-    send_data = JSON.stringify(send_data)
-
+    let { mid, send_data, title, template_id, send_object, send_time ,url, miniprogram, id  } = payload
     // 编辑的时候
+    console.log(id, "saveOrEditMsgid")
+    
     if (id) {
+      let temMsg = await this.getOneMsg(id)
+      if (temMsg.mid != mid) {
+        ctx.throw(409, "商户和模板消息不匹配")
+      }
+      // 更新
+      await temMsg.update({send_data, title, template_id, send_object, send_time, mid, url, miniprogram})
 
+    } else {
+      // 新建
+      await ctx.model.Temmsg.create({send_data, title, template_id, send_object, send_time, mid, url, miniprogram})
     }
-    // 新建
-    await ctx.model.Temmsg.create({send_data, title, template_id, send_object, send_time, mid, url, miniprogram})
   }
 
   /**
@@ -111,14 +118,10 @@ class TemMsgService extends Service {
 
   async getOneMsg(id) {
     const { ctx, service, app } = this
-    const { mid } = ctx.state.user.data
     // const { id  } = payload
     let msg = await ctx.model.Temmsg.findOne({where: {id}})
     if (!msg) {
       ctx.throw(404, "未找到该模板消息")
-    }
-    if (msg.mid != mid) {
-      ctx.throw(410, "商户不匹配")
     }
     return msg
     // console.log(msg, "delres")

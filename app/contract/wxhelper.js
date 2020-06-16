@@ -15,6 +15,9 @@ module.exports = {
     miniprogram: {type: "object", description: "跳小程序所需数据" ,required: false},
   },
   templateDeleteMsgRequest: {
-    id: { type: "number", description: "id", required: true, example: "1"},
+    id: { type: "number", description: "id", required: true, example: 1},
+  },
+  templatePreviewMsgRequest: {
+    id: { type: "number", description: "id", required: true, example: 1},
   }
 }

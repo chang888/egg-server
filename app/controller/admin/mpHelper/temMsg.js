@@ -50,12 +50,35 @@ class TemMsgController extends Controller {
     ctx.validate(ctx.rule.templateSendMsgRequest)
     // 组装参数
     const payload = ctx.request.body || {}
-    console.log(payload, "payload333")
     // 调用 Service 进行业务处理
-    const res = await service.admin.mpHelper.temMsg.sendMsg(payload)
+    const res = await service.admin.mpHelper.temMsg.sendMsg({...payload, mid})
     console.log(res, "sendMsgres")
     // 设置响应内容和响应状态码
     ctx.helper.success({ ctx, msg: res.errmsg })
+  }
+
+   /**
+   * @summary 预览模板消息
+   * @description 生成微信场景id二维码
+   * @router post /admin/mp/temMsg/preview
+   * @request header string *Authorization
+   * @request body templateSendMsgRequest *body
+   * @response 0 baseResponse 生成成功
+   */
+
+  async preview() {
+    const { ctx, service } = this
+    const { mid } = ctx.state.user.data
+    console.log(ctx.request.body, "传入参数")
+    // 校验参数
+    ctx.validate(ctx.rule.templatePreviewMsgRequest)
+    // 组装参数
+    const payload = ctx.request.body || {}
+    // 调用 Service 进行业务处理
+    const res = await service.wechat.wechatApi.qrcodeCreate({mid, action_name:"QR_STR_SCENE", expire_seconds: 600, scene_str: `temMsg-${payload.id}` })
+    console.log(res, "sendMsgres")
+    // 设置响应内容和响应状态码
+    ctx.helper.success({ ctx, res, msg: res.errmsg })
   }
 
 
@@ -75,9 +98,12 @@ class TemMsgController extends Controller {
     ctx.validate(ctx.rule.templateSaveOrEditMsgRequest)
     // 组装参数
     const payload = ctx.request.body || {}
+    payload.send_data = JSON.stringify(payload.send_data)
+
+    payload.miniprogram = JSON.stringify(payload.miniprogram)
     // console.log(payload, "payload333")
     // // 调用 Service 进行业务处理
-    await service.admin.mpHelper.temMsg.saveOrEditMsg(payload)
+    await service.admin.mpHelper.temMsg.saveOrEditMsg({...payload, mid})
     // console.log(res, "sendMsgres")
     // 设置响应内容和响应状态码
     ctx.helper.success({ ctx, msg: "保存成功"})
