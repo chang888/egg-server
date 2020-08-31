@@ -13,7 +13,6 @@ class TemMsgController extends Controller {
    * @summary 微信获取模板列表
    * @description 微信获取模板列表
    * @router post /admin/mp/temMsg/getTemplateList
-   * @request header string *Authorization
    * @request body loginRequest *body
    * @response 200 baseResponse 模板列表
    */
@@ -49,12 +48,13 @@ class TemMsgController extends Controller {
     // 校验参数
     ctx.validate(ctx.rule.templateSendMsgRequest)
     // 组装参数
-    const payload = ctx.request.body || {}
+    const { id } = ctx.request.body || {}
+
     // 调用 Service 进行业务处理
-    const res = await service.admin.mpHelper.temMsg.sendMsg({...payload, mid})
+    const res = await service.admin.mpHelper.temMsg.startMsgTask(id)
     console.log(res, "sendMsgres")
     // 设置响应内容和响应状态码
-    ctx.helper.success({ ctx, msg: res.errmsg })
+    ctx.helper.success({ ctx, msg: "成功" })
   }
 
    /**
@@ -62,7 +62,7 @@ class TemMsgController extends Controller {
    * @description 生成微信场景id二维码
    * @router post /admin/mp/temMsg/preview
    * @request header string *Authorization
-   * @request body templateSendMsgRequest *body
+   * @request body templatePreviewMsgRequest *body
    * @response 0 baseResponse 生成成功
    */
 
@@ -87,7 +87,7 @@ class TemMsgController extends Controller {
    * @description 保存模板消息
    * @router post /admin/mp/temMsg/saveOrEdit
    * @request header string *Authorization
-   * @request body templateSendMsgRequest *body
+   * @request body templateSaveOrEditMsgRequest *body
    * @response 0 baseResponse 保存成功
    */
   async saveOrEdit() {
@@ -121,7 +121,7 @@ class TemMsgController extends Controller {
     const { ctx, service } = this
     console.log(ctx.request.body, "传入参数")
     // 校验参数
-    ctx.validate(ctx.rule.templateDeleteMsgRequest)
+    ctx.validate(ctx.rule.templateSendMsgRequest)
     // 组装参数
     const payload = ctx.request.body || {}
     const { id } = payload
@@ -134,7 +134,7 @@ class TemMsgController extends Controller {
    * @description 删除模板消息
    * @router post /admin/mp/temMsg/delete
    * @request header string *Authorization
-   * @request body templateSendMsgRequest *body
+   * @request body templateDeleteMsgRequest *body
    * @response 0 baseResponse 删除成功
    */
   async delete() {

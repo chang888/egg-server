@@ -1,10 +1,12 @@
 /* eslint valid-jsdoc: "off" */
 
 "use strict"
-function getMatch (ctx) {
+function getMatch(ctx) {
   console.log("访问api:")
   console.log(ctx.path)
-  if (ctx.path.indexOf('login') !=-1 || ctx.path.indexOf('/wx/') !=-1 || ctx.path.indexOf('/merchant/bind') !=-1) {
+  // 忽略token列表
+  let ignore = ["login", "/wx/", "/merchant/bind", "/swagger", "/favicon"]
+  if (ignore.some((item) => ctx.path.search(item) != -1 )) {
     return false
   } else {
     return true
@@ -13,7 +15,7 @@ function getMatch (ctx) {
 /**
  * @param {Egg.EggAppInfo} appInfo app info
  */
-module.exports = appInfo => {
+module.exports = (appInfo) => {
   /**
    * built-in config
    * @type {Egg.EggAppConfig}
@@ -22,7 +24,7 @@ module.exports = appInfo => {
   config.static = {
     // maxAge: 31536000,
     prefix: "/",
-    dir: "app/public"
+    dir: "app/public",
   }
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + "_1561446865227_2139"
@@ -31,22 +33,31 @@ module.exports = appInfo => {
   config.middleware = ["errorHandler"]
   config.swaggerdoc = {
     dirScanner: "./app/controller",
+    // basePath: '/',
     apiInfo: {
       title: "cc接口",
       description: "cc接口文档 for egg",
-      version: "1.0.0"
+      version: "1.0.0",
+    },
+    securityDefinitions: {
+      Bearer: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header',
+      }
     },
     schemes: ["http", "https"],
     consumes: ["application/json"],
     produces: ["application/json"],
-    enableSecurity: false,
+    enableSecurity: true,
+    // enableSecurity: false,
     // enableValidate: true,
     routerMap: true,
-    enable: true
+    enable: true,
   }
   config.cors = {
     credentials: true,
-    origin: ctx => ctx.get('origin'),
+    origin: (ctx) => ctx.get("origin"),
   }
   config.i18n = {
     // 默认语言，默认 "en_US"
@@ -58,7 +69,7 @@ module.exports = appInfo => {
     // Cookie 的 domain 配置，默认为空，代表当前域名有效
     cookieDomain: "",
     // Cookie 默认 `1y` 一年后过期， 如果设置为 Number，则单位为 ms
-    cookieMaxAge: "1y"
+    cookieMaxAge: "1y",
   }
   // config.mongoose = {
   //   url: "mongodb://127.0.0.1:27017/egg_x",
@@ -79,7 +90,7 @@ module.exports = appInfo => {
     password: "Chang789",
     logging: true,
     timezone: "+08:00",
-    timestamps: false
+    timestamps: false,
   }
   // redis
   config.redis = {
@@ -87,14 +98,14 @@ module.exports = appInfo => {
       host: "r-bp1a18a0b7e13ea4pd.redis.rds.aliyuncs.com",
       port: 6379,
       password: "Chang789",
-      db: "0"
-    }
+      db: "0",
+    },
   }
   config.jwt = {
     secret: "Great4-M",
     enable: true, // default is false
     // match: [/^\/api/,/^\/admin/],
-    match: [getMatch,]
+    match: [getMatch],
     // ignore: [
     //   // "/test",
     //   "/wx/third",
@@ -112,7 +123,7 @@ module.exports = appInfo => {
     //   "/auth/jwt/login",
     //   "/swagger-ui.html",
     //   // "/log"
-    // ] 
+    // ]
     // 哪些请求不需要认证
   }
   // add your user config here
@@ -121,23 +132,23 @@ module.exports = appInfo => {
       appid: "wxd96c29c25fcd4c28",
       appsecret: "982817c5b666d6440007b2d99c454603",
       token: "zhengjinbin",
-      encodingAESKey: "45yhmc8slMFvxeJM8z7ThzeiBO62dUZKS1pbDNVhIHu"
+      encodingAESKey: "45yhmc8slMFvxeJM8z7ThzeiBO62dUZKS1pbDNVhIHu",
     },
     openthird: {
       appid: "wx63b29481682ccfd8",
       appsecret: "b19e51c6b40cceef1514f59b0e2c96a5",
       token: "zjb",
-      encodingAESKey: "45yhmc8slMFvxeJM8z7ThzeiBO62dUZKS1pbDNVhIHu"
+      encodingAESKey: "45yhmc8slMFvxeJM8z7ThzeiBO62dUZKS1pbDNVhIHu",
     },
     gzhtest: {
       appid: "wx8e0d0b741d9b1e4a",
       appsecret: "36dbfe832e502ec6f586ecd2b7e874a6",
-      token: "zhengjinbin"
-    }
+      token: "zhengjinbin",
+    },
     // myAppName: 'egg',
   }
 
   return {
-    ...config
+    ...config,
   }
 }

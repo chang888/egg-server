@@ -18,12 +18,9 @@ module.exports = {
     const Merchants = await ctx.model.Merchant.findAll()
     // console.log(Merchants)
     Merchants.forEach(async item => {
-      console.log(21, item)
-
-      let rs = await ctx.service.merchant.setAccessToken(item.appid)
-      // console.log(`定时更新${item.appid}accessToken`, rs)
-
-      // ctx.service.user.create({ mobile: 15057631272 })
+      if (item.appid && item.refresh_token) {
+         await ctx.service.merchant.setAccessToken(item.appid)
+      }
     })
   }
 }

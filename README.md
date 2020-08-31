@@ -30,3 +30,9 @@ $ npm stop
 [egg]: https://eggjs.org
 
 ### [code 码](./docs/code.md)
+
+utuntu
+<!-- 打包镜像 -->
+docker build -t egg-server3 .
+<!-- 启动镜像 -->
+docker run -d -p 7001:7001 egg-server3
