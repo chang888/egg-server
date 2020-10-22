@@ -1,4 +1,4 @@
-let moment = require("moment")
+const moment = require("moment")
 module.exports = {
   schedule: {
     // interval: '10s', // 1 分钟间隔

@@ -94,6 +94,7 @@ module.exports = (appInfo) => {
   }
   // redis
   config.redis = {
+    agent: true,
     client: {
       host: "r-bp1a18a0b7e13ea4pd.redis.rds.aliyuncs.com",
       port: 6379,
@@ -104,27 +105,82 @@ module.exports = (appInfo) => {
   config.jwt = {
     secret: "Great4-M",
     enable: true, // default is false
-    // match: [/^\/api/,/^\/admin/],
     match: [getMatch],
-    // ignore: [
-    //   // "/test",
-    //   "/wx/third",
-    //   "/merchant/bindmpcallback",
-    //   "/wechat/wechatInterface/wechat",
-    //   "/api/v1/test/",
-    //   "/public/",
-    //   "/js",
-    //   "/index.html",
-    //   "/index2.html",
-    //   "/wx/authorize",
-    //   "/wx/callback",
-    //   "/wx/openthird/authorize",
-    //   "/wx/openthird/callback",
-    //   "/auth/jwt/login",
-    //   "/swagger-ui.html",
-    //   // "/log"
-    // ]
-    // 哪些请求不需要认证
+  }
+  config.bull = {
+    app: true,
+    agent: true,
+    client: {
+      name: 'queue',
+      redis: {
+        host: "r-bp1a18a0b7e13ea4pd.redis.rds.aliyuncs.com",
+        port: 6379,
+        password: "Chang789",
+        db: "0",
+      },
+    },
+  }
+  // config.rabbitmq = {
+  //   client: {
+  //     // url: 'amqp://guest:guest@121.199.42.50:15672',
+  //     url: 'amqp://MjphbXFwLWNuLTZqYTF2cnJyYjAwMTpMVEFJNEdHQ3RIeFlyeEQ4UkRNa1ZiUks=:QUFCMTNEMENBMTRCNUI0NzBCRkY5NjY1RThCMkFGMEQ4OTYzRUM2OToxNjAzMzM4MzUzMDkz@amqp-cn-6ja1vrrrb001.mq-amqp.cn-hangzhou-249959-a-internal.aliyuncs.com',
+  //   },
+  //   // load into app, default is open
+  //   app: true,
+  //   // load into agent, default is close
+  //   agent: true,
+  // };
+  // config.rabbitmq = {
+  //   client: {
+  //     url: 'amqp://MjphbXFwLWNuLTZqYTF2cnJyYjAwMTpMVEFJNEdHQ3RIeFlyeEQ4UkRNa1ZiUks=:QUFCMTNEMENBMTRCNUI0NzBCRkY5NjY1RThCMkFGMEQ4OTYzRUM2OToxNjAzMzM4MzUzMDkz@amqp-cn-6ja1vrrrb001.mq-amqp.cn-hangzhou-249959-a-internal.aliyuncs.com:5672',
+  //   },
+  //   // load into app, default is open
+  //   app: true,
+  //   // load into agent, default is close
+  //   agent: false,
+  // }
+  // config.amqplib = {
+  //   client: {
+  //     connectOptions: {
+  //       protocol: 'amqp',
+  //       hostname: 'amqp-cn-6ja1vrrrb001.mq-amqp.cn-hangzhou-249959-a-internal.aliyuncs.com',
+  //       port: 5672,
+  //       username: 'MjphbXFwLWNuLTZqYTF2cnJyYjAwMTpMVEFJNEdHQ3RIeFlyeEQ4UkRNa1ZiUks=',
+  //       password: 'QUFCMTNEMENBMTRCNUI0NzBCRkY5NjY1RThCMkFGMEQ4OTYzRUM2OToxNjAzMzM4MzUzMDkz',
+  //       locale: 'en_US',
+  //       frameMax: 0,
+  //       heartbeat: 0,
+  //       vhost: '/',
+  //     },
+  //     // socketOptions: {
+  //     //   cert: certificateAsBuffer, // client cert
+  //     //   key: privateKeyAsBuffer, // client key
+  //     //   passphrase: 'MySecretPassword', // passphrase for key
+  //     //   ca: [caCertAsBuffer], // array of trusted CA certs
+  //     // },
+  //   }
+  // }
+  config.amqplib = {
+    client: {
+      // url: 'amqp://localhost',
+      connectOptions: {
+        protocol: 'amqp',
+        hostname: '121.199.42.50',
+        port: 5672,
+        username: 'root',
+        password: '123456',
+        locale: 'en_US',
+        frameMax: 0,
+        heartbeat: 0,
+        vhost: '/',
+      },
+      // socketOptions: {
+      //   cert: certificateAsBuffer, // client cert
+      //   key: privateKeyAsBuffer, // client key
+      //   passphrase: 'MySecretPassword', // passphrase for key
+      //   ca: [caCertAsBuffer], // array of trusted CA certs
+      // },
+    }
   }
   // add your user config here
   config.wxConfig = {

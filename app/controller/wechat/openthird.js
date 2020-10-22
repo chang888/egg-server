@@ -71,7 +71,7 @@ class OpenthirdController extends Controller {
           console.log({mid: merchant.mid,openid, template_id, url, send_data, miniprogram  }, "=======")
 
           await service.admin.mpHelper.temMsg.sendMsg({mid: merchant.mid,openid, template_id, url, send_data, miniprogram})
-          return `${temMsg.title}发送成功`
+          return `推送主题：${temMsg.title} 发送成功`
         }
       }
       if (message.MsgType == "event" && message.Event == "subscribe") {
@@ -90,7 +90,7 @@ class OpenthirdController extends Controller {
             console.log({mid: merchant.mid,openid, template_id, url, send_data, miniprogram  }, "=======")
   
             await service.admin.mpHelper.temMsg.sendMsg({mid: merchant.mid,openid, template_id, url, send_data, miniprogram})
-            return `${temMsg.title}发送成功`
+            return `推送主题：${temMsg.title} 发送成功`
           }
         }
       }

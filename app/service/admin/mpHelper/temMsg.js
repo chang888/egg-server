@@ -67,10 +67,10 @@ class TemMsgService extends Service {
    * @param {Object} id
    */
   async startMsgTask(id) {
-    const { ctx, service, app } = this
+    const { ctx, service, app, agent } = this
 
-    let msg = await this.getOneMsg(id)
-    if (moment(msg.send_time).isBefore(moment())) {
+    let tplMsg = await this.getOneMsg(id)
+    if (moment(tplMsg.send_time).isBefore(moment())) {
       console.log("在当前时间之前 直接发送")
       console.log(msg.status)
       if (msg.status == 0) {
@@ -83,18 +83,41 @@ class TemMsgService extends Service {
           if (rs.count > 10000) {
           } else {
             openIds = rs.data.openid
-            openIds.forEach( async item => {
-              console.log({openid: item, ...msg.dataValues}, "参数")
-              await this.sendMsg({openid: item, ...msg.dataValues})
+            openIds.forEach(async (item) => {
+              console.log({ openid: item, ...msg.dataValues }, "参数")
+              await this.sendMsg({ openid: item, ...msg.dataValues })
             })
           }
         }
         await msg.update({ status: "1" })
         console.log("状态正常执行发送")
       } else {
-        ctx.throw(500, `${msg.id} ${msg.title}模板消息任务异常`)
+        ctx.throw(500, `推送主题：${msg.title} 发送失败`)
       }
     } else {
+      await app.redis.get('client1').set(`quene11111`, "token", "EX", 30)
+
+
+      // console.log( app.bull.empty())
+      //  console.log( await app.bull.getJob(160).retry())
+      // app.bull.process((job) => {
+      //   console.log("消费者",job.data, job1, "app.bull.process"); // 'this is a job'
+      // // });
+      // console.log(agent, "agent.bull")
+      // app.bull.add("jobname", {msgid: id}, {jobId: id});
+      // (async () => {
+      //   // you can access to connection and channel using app.rabbitmq.
+      //   const { ch, conn } = app.rabbitmq;
+      //   // assertQueue
+      //   await ch.assertQueue(queueName, { durable: true });
+      //   // checkQueue
+      //   await ch.checkQueue(queueName);
+      //   // sendToQueue
+      //   ch.sendToQueue(queueName, Buffer.from(msg));
+      //   // If you want to get a channel which uses "confirmation mode"
+      //   const confirmChannel = await conn.createConfirmChannel();
+      // }).catch(console.error);
+      ctx.throw(500, `暂时不支持定时任务`)
       console.log("暂时不支持定时任务")
     }
   }

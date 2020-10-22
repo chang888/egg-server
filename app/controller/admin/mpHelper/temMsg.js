@@ -42,7 +42,7 @@ class TemMsgController extends Controller {
    * @response 0 baseResponse 发送成功
    */
   async send() {
-    const { ctx, service } = this
+    const { ctx, service, app } = this
     const { mid } = ctx.state.user.data
     console.log(ctx.request.body, "传入参数")
     // 校验参数
@@ -51,8 +51,8 @@ class TemMsgController extends Controller {
     const { id } = ctx.request.body || {}
 
     // 调用 Service 进行业务处理
+    console.log(id, "id")
     const res = await service.admin.mpHelper.temMsg.startMsgTask(id)
-    console.log(res, "sendMsgres")
     // 设置响应内容和响应状态码
     ctx.helper.success({ ctx, msg: "成功" })
   }

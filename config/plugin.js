@@ -40,5 +40,29 @@ module.exports = {
   jwt: {
     enable: true,
     package: "egg-jwt"
+  },
+  // logrotator : {
+  //   enable: true,
+  //   package: 'egg-logrotator',
+  // },
+  bull: {  // 插件名称是 'bull'
+    enable: true,
+    package: 'egg-bull-queue', // 包名称是 'egg-bull-queue'
+  },
+  // rabbitmq: {
+  //   enable: true,
+  //   package: 'egg-amqplib-plus',
+  // }
+  // amqplib : {
+  //   enable: true,
+  //   package: 'egg-amqplib-tf',
+  // }
+  // rabbitmq: {
+  //   enable: true,
+  //   package: '@eggplugin/rabbitmq'
+  // },
+  amqplib: {
+    enable: true,
+    package: 'egg-amqplib',
   }
 }

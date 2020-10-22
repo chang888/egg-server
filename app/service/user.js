@@ -13,7 +13,7 @@ class UserService extends Service {
 
     const mid = merchant.mid
 
-    await app.redis.set(`wxUser_mid_${mid}_openid_${openid}_accessToken`, access_token, "EX", expires_in)
+    await app.redis.get("client1").set(`wxUser_mid_${mid}_openid_${openid}_accessToken`, access_token, "EX", expires_in)
     let users = await ctx.model.User.findOrCreate({ where: { openid } })
     // 查找并更新
     let user = await users[0].update({ access_token, refresh_token, mid, unionid })
